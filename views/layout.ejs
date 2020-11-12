@@ -20,8 +20,8 @@
                 data-target="#menu" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="menu">
-            <ul class="navbar-nav mr-auto">
+        <div class="collapse navbar-collapse text-right" id="menu">
+            <ul class="nav navbar-nav ml-auto">
                 <% Object.keys(menu).forEach( function(itemId) { %>
                     <li class="nav-item <%= itemId === activeMenu ? 'active' : '' %> ">
                         <a href="<%=menu[itemId].path %>" class="nav-link">

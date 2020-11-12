@@ -1,0 +1,10 @@
+{
+  "groups": {
+    "path": "/groups",
+    "name": "Группы"
+  },
+  "logout": {
+    "path": "/logout",
+    "name": "Выход"
+  }
+}

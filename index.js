@@ -20,6 +20,7 @@ const db = require('./models')
 const router = require('./router')
 const logger = require('./utils/logger');
 const config = require('./config/config');
+const menu = require('./menu/menu.json')
 
 
 logger.info('~~~ Starting ClassJournal APP ~~~');
@@ -90,12 +91,12 @@ app
         try {
             ctx.state.officialSite = '/';
             ctx.state.title = 'Журнал';
+            ctx.state.activeMenu = '';
             /*ctx.state.declension = declension;
             ctx.state.formatDate = formatDate;
             ctx.state.formatDateTime = formatDateTime;
             ctx.state.formatMoney = formatMoney;
             ctx.state.genderify = genderify;*/
-            ctx.state.menu = {};
             ctx.state.lastModified = lastModified;
 
             await next()
@@ -110,6 +111,11 @@ app
     .use(koaValidator())
     .use(passport.initialize())
     .use(passport.session())
+    .use(async (ctx, next) => {
+        ctx.state.isAuthenticated = ctx.isAuthenticated();
+        ctx.state.menu = ctx.isAuthenticated() ? menu : {};
+        return next();
+    })
     .use(router.routes())
     .use(router.allowedMethods())
 
