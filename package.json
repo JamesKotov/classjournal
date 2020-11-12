@@ -1,0 +1,44 @@
+{
+  "name": "classjournal",
+  "version": "1.0.0",
+  "description": "Class journal app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamesKotov/classjournal.git"
+  },
+  "author": "Evgeniy Strigo",
+  "email": "eugene@strigo.ru",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/JamesKotov/classjournal/issues"
+  },
+  "homepage": "https://github.com/JamesKotov/classjournal#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "csso": "^4.1.0",
+    "koa": "^2.13.0",
+    "koa-async-validator": "^0.4.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-cache-control": "^2.0.0",
+    "koa-compress": "^5.0.1",
+    "koa-ejs": "^4.3.0",
+    "koa-html-minifier": "^2.0.0",
+    "koa-passport": "^4.1.3",
+    "koa-req-logger": "^1.5.3",
+    "koa-router": "^10.0.0",
+    "koa-session": "^6.1.0",
+    "mime-types": "^2.1.27",
+    "mysql2": "^2.2.5",
+    "node-dir": "^0.1.17",
+    "node-html-parser": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "pino": "^6.7.0",
+    "sequelize": "^6.3.5",
+    "uglify-js": "^3.11.5",
+    "zlib": "^1.0.5"
+  }
+}
