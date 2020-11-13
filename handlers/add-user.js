@@ -1,7 +1,7 @@
 'use strict';
 const bcrypt = require('bcrypt')
 
-const {User} = require('../models')
+const {Users} = require('../models')
 const saltRounds = 10
 
 
@@ -18,7 +18,7 @@ module.exports = async (ctx, next) => {
     } else {
         ctx.request.body.password = await bcrypt.hash(ctx.request.body.password, saltRounds)
         try {
-            ctx.body = await User.create(ctx.request.body)
+            ctx.body = await Users.create(ctx.request.body)
         } catch (error) {
             ctx.body = error
         }

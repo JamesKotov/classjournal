@@ -1,6 +1,6 @@
 const passport = require('koa-passport')
 const bcrypt = require('bcrypt')
-const {User} = require('../models')
+const {Users} = require('../models')
 
 /**
  * Serialize user
@@ -19,7 +19,7 @@ passport.serializeUser((user, done) => {
  */
 passport.deserializeUser(async (id, done) => {
     try {
-        const user = await User.findByPk(id)
+        const user = await Users.findByPk(id)
         done(null, user)
     } catch (err) {
         done(err)
@@ -36,7 +36,7 @@ passport.deserializeUser(async (id, done) => {
 const LocalStrategy = require('passport-local').Strategy;
 
 passport.use(new LocalStrategy(async (username, password, done) => {
-        const user = await User.findOne({
+        const user = await Users.findOne({
             where: {
                 email: username
             }

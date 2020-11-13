@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 const {
     Model
-} = require('sequelize');
+} = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-    class User extends Model {
+    class Users extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,10 +11,11 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            models.Users.hasMany(models.Groups, { foreignKey: "user_id"});
         }
     }
 
-    User.init({
+    Users.init({
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
@@ -34,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
             comment: "пароль"
         },
         role: {
-            type: DataTypes.ENUM('guest', 'teacher', 'admin'),
+            type: DataTypes.ENUM("guest","teacher","admin"),
             allowNull: false,
             comment: "роль"
         },
@@ -54,19 +55,19 @@ module.exports = (sequelize, DataTypes) => {
             comment: "отчество"
         },
         gender: {
-            type: DataTypes.ENUM('male', 'female'),
+            type: DataTypes.ENUM("male","female"),
             allowNull: false,
             comment: "пол"
         }
     }, {
         sequelize,
         tableName: "Users",
-        modelName: 'User',
+        modelName: "Users",
         comment: "Пользователи",
         timestamps: true,
-        engine: 'InnoDB',
-        charset: 'utf8',
-        collate: 'utf8_general_ci',
+        engine: "InnoDB",
+        charset: "utf8",
+        collate: "utf8_general_ci",
         indexes: [
             {
                 name: "PRIMARY",
@@ -86,5 +87,5 @@ module.exports = (sequelize, DataTypes) => {
             },
         ]
     });
-    return User;
+    return Users;
 };

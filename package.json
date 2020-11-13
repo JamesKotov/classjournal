@@ -40,5 +40,8 @@
     "sequelize": "^6.3.5",
     "uglify-js": "^3.11.5",
     "zlib": "^1.0.5"
+  },
+  "devDependencies": {
+    "sequelize-auto": "^0.7.1"
   }
 }
