@@ -106,3 +106,27 @@ function declension(count, oneNominative, severalNominative, severalGenitive, op
     result.push(severalGenitive);
     return result.join(params.delimiter);
 }
+
+ready(function() {
+    var menuItens = document.querySelectorAll('#menuTabs>li');
+    for (var i = 0; i < menuItens.length; i++) {
+        menuItens[i].addEventListener("click", function(){
+            // occulting divs - removing .active class
+            var tabs = document.querySelectorAll('.tab-content>.tab-pane');
+            for (var k = 0; k < tabs.length; k++) {
+                tabs[k].className = "tab-pane";
+            }
+            // removing .active from menu itens
+            for (var j = 0; j < menuItens.length; j++) {
+                menuItens[j].getElementsByTagName("A")[0].className = "nav-link";
+            }
+            // setting .active in clicked item
+            this.getElementsByTagName("A")[0].className = "nav-link active";
+            // getting target id
+            var linkTab = this.id;
+            // showing the selected tab div
+            var tab = document.querySelectorAll('.tab-content>#content_'+linkTab)[0];
+            tab.className = "tab-pane active";
+        });
+    }
+})

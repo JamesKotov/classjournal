@@ -37,6 +37,8 @@ router
     .post('/users/add', require('../handlers/add-user'))
 
     .get('/groups', authenticated(), require('../handlers/groups'))
+    .get('/groups/:group_id', authenticated(), require('../handlers/group'))
+    .get('/groups/:group_id/lessons/:lesson_id', authenticated(), require('../handlers/lesson'))
 
 
 module.exports = router

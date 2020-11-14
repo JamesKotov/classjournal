@@ -20,7 +20,8 @@ const db = require('./models')
 const router = require('./router')
 const logger = require('./utils/logger');
 const config = require('./config/config');
-const menu = require('./menu/menu.json')
+const menu = require('./menu/menu.json');
+const {formatDateShort} = require('./utils/format-date');
 
 
 logger.info('~~~ Starting ClassJournal APP ~~~');
@@ -82,18 +83,20 @@ app
         decodeEntities: true,
         removeComments: true,
         minifyCSS: true,
-        minifyJS: true,
+        // minifyJS: true,
     }))
     .use(cacheControl({
         noCache: true
     }))
     .use(async (ctx, next) => {
         try {
-            ctx.state.officialSite = '/';
             ctx.state.title = 'Журнал';
             ctx.state.activeMenu = '';
+            ctx.state.user = null;
+            ctx.state.breadcrumbs = [];
+            ctx.state.formatDateShort = formatDateShort;
             /*ctx.state.declension = declension;
-            ctx.state.formatDate = formatDate;
+
             ctx.state.formatDateTime = formatDateTime;
             ctx.state.formatMoney = formatMoney;
             ctx.state.genderify = genderify;*/
@@ -101,6 +104,7 @@ app
 
             await next()
         } catch (err) {
+            ctx.state.title = '';
             ctx.status = err.status || 500;
             ctx.log.error(err)
             return ctx.render(ctx.status);

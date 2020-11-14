@@ -1,0 +1,18 @@
+<dl class="row">
+    <% Object.keys(lessons).sort().forEach( function(date) { %>
+        <dt class="col-sm-12">
+            <%= formatDateShort(new Date(date)) %>
+        </dt>
+        <dd class="col-sm-12">
+            <ul>
+                <% lessons[date].forEach(lesson => { %>
+                    <li>
+                        <a href="/groups/<%= group.id %>/lessons/<%= lesson.id %>">
+                            <%- [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ') %>
+                        </a>
+                    </li>
+                <% }); %>
+            </ul>
+        </dd>
+    <% }); %>
+</dl>

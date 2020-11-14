@@ -39,6 +39,7 @@
     "pino": "^6.7.0",
     "sequelize": "^6.3.5",
     "uglify-js": "^3.11.5",
+    "url-join": "^4.0.1",
     "zlib": "^1.0.5"
   },
   "devDependencies": {

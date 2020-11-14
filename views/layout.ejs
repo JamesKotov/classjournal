@@ -3,40 +3,70 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="robots" content="noindex, nofollow" />
-    <link rel="stylesheet" href="/styles.css?v=<%=lastModified.styles%>">
-    <title><%= title %></title>
-    <script src="/scripts.js?v=<%=lastModified.scripts%>"></script>
+    <meta name="robots" content="noindex, nofollow"/>
+    <link rel="stylesheet" href="/styles.css?v=<%= lastModified.styles %>">
+    <title><%- title %></title>
+    <script src="/scripts.js?v=<%= lastModified.scripts %>"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container bg-dark">
         <a class="navbar-brand" href="/" tabindex="0">
-            <img alt="ДМШ №37" class="mr-2" width="47" height="62" src="/logo.png?v=<%=lastModified.logo%>"/>
+            <img alt="ДМШ №37" class="mr-2" width="47" height="62" src="/logo.png?v=<%= lastModified.logo %>"/>
         </a>
-        <% if(Object.keys(menu).length) { %>
-        <button aria-controls="menu" aria-expanded="false" aria-label="Toggle menu"
-                class="navbar-toggler"
-                data-target="#menu" data-toggle="collapse" type="button">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse text-right" id="menu">
-            <ul class="nav navbar-nav ml-auto">
-                <% Object.keys(menu).forEach( function(itemId) { %>
-                    <li class="nav-item <%= itemId === activeMenu ? 'active' : '' %> ">
-                        <a href="<%=menu[itemId].path %>" class="nav-link">
-                            <%=menu[itemId].name %>
-                        </a>
-                    </li>
-                <% }); %>
-            </ul>
+        <div class="text-white small">
+            <% if(user) { %>
+                <%= user.surname %>
+                <br/>
+                <%= user.name %>
+                <br/>
+                <%= user.patronimic %>
+            <% } %>
         </div>
+        <% if(Object.keys(menu).length) { %>
+            <button aria-controls="menu" aria-expanded="false" aria-label="Toggle menu"
+                    class="navbar-toggler"
+                    data-target="#menu" data-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-right" id="menu">
+                <ul class="nav navbar-nav ml-auto">
+                    <% Object.keys(menu).forEach( function(itemId) { %>
+                        <li class="nav-item <%= itemId === activeMenu ? 'active' : '' %> ">
+                            <a href="<%= menu[itemId].path %>" class="nav-link">
+                                <%= menu[itemId].name %>
+                            </a>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
         <% } %>
     </div>
 </nav>
 <br/>
 <main class="container">
-    <%- body %>
+    <div class="row">
+        <div class="col">
+            <% const bcl = breadcrumbs.length; if(bcl) { %>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <% breadcrumbs.forEach( function(breadcrumb, index) { %>
+                        <li class="breadcrumb-item">
+                            <a href="<%= breadcrumb.path %>">
+                                <%- breadcrumb.name %>
+                            </a>
+                        </li>
+                        <% }); %>
+                    </ol>
+                </nav>
+            <% } %>
+
+            <% if(title) { %>
+                <h1 class="mb-4"><%- title %></h1>
+            <% } %>
+            <%- body %>
+        </div>
+    </div>
 </main>
 <hr>
 <footer class="footer">
@@ -45,19 +75,20 @@
     </div>
 </footer>
 <% if(Object.keys(menu).length) { %>
-<script>
-    function initMenu() {
-        var menu = document.getElementById("menu");
-        addEventListener(document, "click", function(event) {
-            if (hasClass(event.target, "navbar-toggler-icon")) {
-                toggleClass(menu, "show");
-            } else if (hasClass(event.target, "nav-link")) {
-                removeClass(menu, "show");
-            }
-        });
-    }
-    ready(initMenu);
-</script>
+    <script>
+        function initMenu() {
+            var menu = document.getElementById("menu");
+            addEventListener(document, "click", function (event) {
+                if (hasClass(event.target, "navbar-toggler-icon")) {
+                    toggleClass(menu, "show");
+                } else if (hasClass(event.target, "nav-link")) {
+                    removeClass(menu, "show");
+                }
+            });
+        }
+
+        ready(initMenu);
+    </script>
 <% } %>
 </body>
 </html>

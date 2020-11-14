@@ -1,6 +1,9 @@
-<div class="row">
-    <div class="col">
-        <h1>Группы</h1>
-
-    </div>
-</div>
+<ul>
+    <% groups.forEach( function(group) { %>
+        <li>
+            <a href="/groups/<%= group.id %>">
+                <%= group.name %>
+            </a>
+        </li>
+    <% }); %>
+</ul>
