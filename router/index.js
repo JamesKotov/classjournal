@@ -34,7 +34,7 @@ router
         return ctx.redirect('/')
     })
 
-    .post('/users/add', require('../handlers/add-user'))
+    .post('/users/add', authenticated(), require('../handlers/add-user'))
 
     .get('/groups', authenticated(), require('../handlers/groups'))
     .get('/groups/:group_id', authenticated(), require('../handlers/group'))
