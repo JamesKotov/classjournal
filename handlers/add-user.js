@@ -1,8 +1,8 @@
 'use strict';
-const bcrypt = require('bcrypt')
+const crypto = require('crypto');
 
+const config = require('../config/config');
 const {Users} = require('../models')
-const saltRounds = 10
 
 
 module.exports = async (ctx, next) => {
@@ -16,7 +16,7 @@ module.exports = async (ctx, next) => {
     if (errors) {
         ctx.body = `There have been validation errors: ${errors}`
     } else {
-        ctx.request.body.password = await bcrypt.hash(ctx.request.body.password, saltRounds)
+        ctx.request.body.password = crypto.scryptSync(ctx.request.body.password, config.hashSecret, 64).toString('hex');
         try {
             ctx.body = await Users.create(ctx.request.body)
         } catch (error) {

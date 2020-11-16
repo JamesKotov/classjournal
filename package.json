@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/JamesKotov/classjournal#readme",
   "dependencies": {
-    "bcrypt": "^5.0.0",
     "csso": "^4.1.0",
     "koa": "^2.13.0",
     "koa-async-validator": "^0.4.1",

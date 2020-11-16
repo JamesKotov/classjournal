@@ -1,5 +1,9 @@
+'use strict';
+
+const crypto = require('crypto');
 const passport = require('koa-passport')
-const bcrypt = require('bcrypt')
+
+const config = require('../config/config');
 const {Users} = require('../models')
 
 /**
@@ -42,13 +46,11 @@ passport.use(new LocalStrategy(async (username, password, done) => {
             }
         });
         if (user) {
-            bcrypt.compare(password, user.password, (error, response) => {
-                if (response) {
-                    done(null, user);
-                } else {
-                    done(null, false)
-                }
-            })
+            if (user.password === crypto.scryptSync(password, config.hashSecret, 64).toString('hex')) {
+                done(null, user);
+            } else {
+                done(null, false)
+            }
         } else {
             done(null, false)
         }

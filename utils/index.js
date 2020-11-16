@@ -1,3 +1,5 @@
+'use strict';
+
 // Functions which will be used here and there
 
 /**
