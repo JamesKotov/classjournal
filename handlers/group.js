@@ -32,6 +32,10 @@ module.exports = async (ctx) => {
 
     ctx.state.title = group.name;
 
+    ctx.state.breadcrumbs = [
+        {name: "Группы", path: '/groups'},
+    ];
+
     const template = 'group';
     return ctx.render(template, {})
 };

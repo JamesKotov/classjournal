@@ -3,6 +3,8 @@
 const envUtils = require('../utils/env');
 const getEnvVariable = envUtils.getEnvVariable;
 
+const ABSENCE_SKILL_ID = 1;
+
 const config = {
     env: getEnvVariable('NODE_ENV', 'dev'),
 
@@ -13,6 +15,8 @@ const config = {
     dbDsn: getEnvVariable('DB_DSN', ''),
 
     hashSecret: getEnvVariable('HASH_SECRET', ''),
+
+    absence_skill_id: ABSENCE_SKILL_ID,
 
 };
 

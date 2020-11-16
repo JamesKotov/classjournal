@@ -22,6 +22,7 @@ const logger = require('./utils/logger');
 const config = require('./config/config');
 const menu = require('./menu/menu.json');
 const {formatDateShort} = require('./utils/format-date');
+const {getMarksForSkill, isCurrentMark} = require('./utils/marks');
 
 
 logger.info('~~~ Starting ClassJournal APP ~~~');
@@ -83,7 +84,7 @@ app
         decodeEntities: true,
         removeComments: true,
         minifyCSS: true,
-        // minifyJS: true,
+        minifyJS: true,
     }))
     .use(cacheControl({
         noCache: true
@@ -95,8 +96,11 @@ app
             ctx.state.user = null;
             ctx.state.breadcrumbs = [];
             ctx.state.formatDateShort = formatDateShort;
+            ctx.state.getMarksForSkill = getMarksForSkill;
+            ctx.state.isCurrentMark = isCurrentMark;
+            ctx.state.encodeURIComponent = encodeURIComponent;
+            ctx.state.absence_skill_id = config.absence_skill_id;
             /*ctx.state.declension = declension;
-
             ctx.state.formatDateTime = formatDateTime;
             ctx.state.formatMoney = formatMoney;
             ctx.state.genderify = genderify;*/

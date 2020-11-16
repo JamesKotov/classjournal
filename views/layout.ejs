@@ -6,6 +6,8 @@
     <meta name="robots" content="noindex, nofollow"/>
     <link rel="stylesheet" href="/styles.css?v=<%= lastModified.styles %>">
     <title><%- title %></title>
+    <link rel="icon" href="/favicon.ico?v=<%= lastModified.favicon %>" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/favicon.ico?v=<%= lastModified.favicon %>" type="image/x-icon"/>
     <script src="/scripts.js?v=<%= lastModified.scripts %>"></script>
 </head>
 <body>
@@ -50,7 +52,7 @@
             <% const bcl = breadcrumbs.length; if(bcl) { %>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <% breadcrumbs.forEach( function(breadcrumb, index) { %>
+                        <% breadcrumbs.forEach( function(breadcrumb) { %>
                         <li class="breadcrumb-item">
                             <a href="<%= breadcrumb.path %>">
                                 <%- breadcrumb.name %>
@@ -76,7 +78,7 @@
 </footer>
 <% if(Object.keys(menu).length) { %>
     <script>
-        function initMenu() {
+        ready(function () {
             var menu = document.getElementById("menu");
             addEventListener(document, "click", function (event) {
                 if (hasClass(event.target, "navbar-toggler-icon")) {
@@ -85,9 +87,7 @@
                     removeClass(menu, "show");
                 }
             });
-        }
-
-        ready(initMenu);
+        });
     </script>
 <% } %>
 </body>

@@ -2,8 +2,7 @@
 
 const urljoin = require('url-join');
 
-const {Marks, SkillSets, Skills, Subjects} = require('../models');
-const ABSENCE_SKILL_ID = 1;
+const {SkillSets, Skills, Subjects} = require('../models');
 
 module.exports = async (ctx) => {
 
@@ -39,17 +38,23 @@ module.exports = async (ctx) => {
 
     ctx.state.lesson = lesson
     ctx.state.group = group;
-    ctx.state.students = await group.getStudents();
     ctx.state.skillsets = await SkillSets.findAll({
         where: {
             subject_id: lesson.subject_id,
             class: group.class
         },
         include: Skills,
-        order: ["skill_id"]
+        order: ["skill_order", "skill_id"]
     })
 
+    ctx.state.students = await group.getStudents({
+        order: ["surname", "name"]
+    });
+
     ctx.state.marks = await lesson.getMarks()
+
+    const used_skills = [...new Set(ctx.state.marks.map(m => m.skill_id))]
+    ctx.state.used_skills = ctx.state.skillsets.filter(s => used_skills.indexOf(s.skill_id) >= 0)
 
     ctx.state.title = [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ')
 
@@ -57,12 +62,6 @@ module.exports = async (ctx) => {
         {name: "Группы", path: '/groups'},
         {name: group.name, path: urljoin('/groups', group.id+'')},
     ];
-
-    ctx.state.getMarksForSkill = function(skill_id) {
-        const all_marks = Marks.rawAttributes['mark'].values;
-        const marks = skill_id === ABSENCE_SKILL_ID ? all_marks.slice(0, 1) : all_marks.slice(1);
-        return [''].concat(marks)
-    }
 
     const template = 'lesson';
     return ctx.render(template, {})

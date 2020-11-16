@@ -46,7 +46,12 @@ module.exports = (sequelize, DataTypes) => {
                 model: "Skills",
                 key: "id"
             }
-        }
+        },
+        skill_order: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            comment: "порядок сортировки"
+        },
     }, {
         sequelize,
         tableName: "SkillSets",

@@ -66,59 +66,59 @@ function toggleClass(el, className) {
     }
 }
 
-function formatMoney(a, n, x, s, c) {
-    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
-        num = a.toFixed(Math.max(0, ~~n));
-
-    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+function onMarkChange(event) {
+    var el = event.target;
+    var name = el.getAttribute('name');
+    var val = hasClass(el, "absense-mark") && !el.checked ? '' : el.value;
+    return name + '=' + encodeURIComponent(val);
 }
 
-function declension(count, oneNominative, severalNominative, severalGenitive, options) {
-    options = options || {};
-    var params = Object.assign({}, {printCount: true, delimiter: ' '}, options);
-    var result = [];
-    if (params.printCount) {
-        result.push(count);
-    }
+function sendPostRequest(url, data, successCb, failCb) {
+    var request = new XMLHttpRequest();
+    request.open('POST', url, true);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 
-    if (typeof count !== 'number') {
-        return '';
+    request.onreadystatechange = function() {
+        if (this.readyState === 4) {
+            if (this.status >= 200 && this.status < 400) {
+                // Success!
+                if (successCb) {
+                    successCb();
+                }
+            } else {
+                if (failCb) {
+                    failCb();
+                }
+            }
+        }
+    };
+    request.send(data);
+}
+
+function triggerEvent(el, eventName) {
+    if (document.createEvent) {
+        var event = document.createEvent('HTMLEvents');
+        event.initEvent(eventName, true, false);
+        el.dispatchEvent(event);
+    } else {
+        el.fireEvent(eventName);
     }
-    if (!(Number.isFinite(count) && !(count % 1))) {
-        result.push(severalNominative);
-        return result.join(params.delimiter);
-    }
-    count = Math.abs(count);
-    count %= 100;
-    if (count >= 5 && count <= 20) {
-        result.push(severalGenitive);
-        return result.join(params.delimiter);
-    }
-    count %= 10;
-    if (count === 1) {
-        result.push(oneNominative);
-        return result.join(params.delimiter);
-    }
-    if (count >= 2 && count <= 4) {
-        result.push(severalNominative);
-        return result.join(params.delimiter);
-    }
-    result.push(severalGenitive);
-    return result.join(params.delimiter);
 }
 
 ready(function() {
-    var menuItens = document.querySelectorAll('#menuTabs>li');
-    for (var i = 0; i < menuItens.length; i++) {
-        menuItens[i].addEventListener("click", function(){
+    var menuItems = document.querySelectorAll('#menuTabs>li');
+    var tabsId = {};
+    for (var i = 0; i < menuItems.length; i++) {
+        tabsId['#' + menuItems[i].id] = menuItems[i];
+        menuItems[i].addEventListener("click", function(){
             // occulting divs - removing .active class
             var tabs = document.querySelectorAll('.tab-content>.tab-pane');
             for (var k = 0; k < tabs.length; k++) {
                 tabs[k].className = "tab-pane";
             }
-            // removing .active from menu itens
-            for (var j = 0; j < menuItens.length; j++) {
-                menuItens[j].getElementsByTagName("A")[0].className = "nav-link";
+            // removing .active from menu items
+            for (var j = 0; j < menuItems.length; j++) {
+                menuItems[j].getElementsByTagName("A")[0].className = "nav-link";
             }
             // setting .active in clicked item
             this.getElementsByTagName("A")[0].className = "nav-link active";
@@ -128,5 +128,10 @@ ready(function() {
             var tab = document.querySelectorAll('.tab-content>#content_'+linkTab)[0];
             tab.className = "tab-pane active";
         });
+    }
+
+    var hash = window.location.hash;
+    if (hash && Object.keys(tabsId).indexOf(hash) >= 0) {
+        triggerEvent(tabsId[hash], 'click');
     }
 })

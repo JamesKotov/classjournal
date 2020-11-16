@@ -96,6 +96,16 @@ module.exports = (sequelize, DataTypes) => {
                     {name: "skill_id"},
                 ]
             },
+            {
+                name: "uniq_idx",
+                unique: true,
+                using: "BTREE",
+                fields: [
+                    {name: "student_id"},
+                    {name: "lesson_id"},
+                    {name: "skill_id"},
+                ]
+            },
         ]
     });
     return Marks;

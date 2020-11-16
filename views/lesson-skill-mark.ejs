@@ -1,0 +1,88 @@
+<div class="mt-4">
+    <a href="/groups/<%= group.id %>/lessons/<%= lesson.id %>" class="btn btn-success">&larr; Назад, к уроку</a>
+    <a href="/groups/<%= group.id %>/lessons/<%= lesson.id %>#summary" class="btn btn-info">Сводка</a>
+</div>
+
+<div id="mark-save-alert" class="d-none mt-4 alert alert-danger" role="alert">
+    Произошла ошибка при сохранении оценки!
+</div>
+
+<div class="table-responsive mt-4">
+    <table class="table table-striped table-bordered table-hover table-sm">
+        <thead>
+        <tr>
+            <th scope="col" class="align-top">Ученики</th>
+            <% skillsets.forEach( function(item) { %>
+                <th scope="col" class="align-top text-center"><%= item.Skill.name %></th>
+            <% }); %>
+        </tr>
+        </thead>
+        <tbody>
+        <% students.forEach( function(student) { %>
+            <tr>
+                <th scope="row" class="align-middle">
+                    <%= student.surname %>
+                    <%= student.name %>
+                </th>
+                <% skillsets.forEach( function(item) {
+                    const skills = getMarksForSkill(item.skill_id, absence_skill_id);
+                    const is_disabled = isCurrentMark(marks, lesson.id, student.id, absence_skill_id, getMarksForSkill(absence_skill_id, absence_skill_id)[0]);
+                %>
+                <td class="align-middle text-center" id="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>">
+                    <% if(item.skill_id === absence_skill_id) { %>
+                        <% skills.forEach( function(mark) {
+                            const is_current = isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark);
+                        %>
+                        <input type="checkbox" class="mark absense-mark"
+                               value="<%= encodeURIComponent(mark) %>"
+                                <%= is_current ? 'checked="checked"' : '' %>
+                               name="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>"/>
+                        <% }); %>
+                    <% } else { %>
+                        <select class="form-control form-control-sm mark value-mark"
+                                <%= is_disabled ? 'disabled="disabled"' : '' %>
+                                name="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>">
+                            <% skills.forEach( function(mark) {
+                                const is_current = isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark);
+                            %>
+                            <option value="<%= encodeURIComponent(mark) %>" <%= is_current ? 'selected="selected"' : '' %>>
+                                <%= mark %>
+                            </option>
+                            <% }); %>
+                        </select>
+                    <% } %>
+                </td>
+                <% }); %>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
+<script>
+    function showAlert() {
+        var alert = document.getElementById("mark-save-alert");
+        removeClass(alert, "d-none");
+    }
+
+    function hideAlert() {
+        var alert = document.getElementById("mark-save-alert");
+        addClass(alert, "d-none");
+    }
+
+    function initMarks(input_class, event_name) {
+        var marks = document.querySelectorAll(input_class);
+        for (var i = 0; i < marks.length; i++) {
+            addEventListener(marks[i], event_name, function (event) {
+                hideAlert();
+                var data = onMarkChange(event);
+                sendPostRequest(window.location.href, data, null, showAlert);
+            });
+        }
+    }
+
+    ready(function(){
+        initMarks('.absense-mark', 'click');
+        initMarks('.value-mark', 'change');
+    });
+
+</script>
