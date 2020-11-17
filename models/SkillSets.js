@@ -50,7 +50,8 @@ module.exports = (sequelize, DataTypes) => {
         skill_order: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            comment: "порядок сортировки"
+            comment: "порядок сортировки",
+            defaultValue: 0,
         },
     }, {
         sequelize,
