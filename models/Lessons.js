@@ -1,7 +1,6 @@
 "use strict";
 const {
-    Model,
-    Sequelize
+    Model
 } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
     class Lessons extends Model {
@@ -15,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             models.Lessons.belongsTo(models.Groups, {foreignKey: "group_id"});
             models.Lessons.belongsTo(models.Subjects, {foreignKey: "subject_id"});
             models.Lessons.hasMany(models.Marks, {foreignKey: "lesson_id"});
+            models.Lessons.hasMany(models.Quarters, {foreignKey: "quarter_id"});
         }
     }
 
@@ -25,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true,
             comment: "id"
+        },
+        quarter_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Quarters',
+                key: 'id'
+            }
         },
         date: {
             type: DataTypes.DATEONLY,
@@ -98,6 +106,13 @@ module.exports = (sequelize, DataTypes) => {
                 using: "BTREE",
                 fields: [
                     {name: "subject_id"},
+                ]
+            },
+            {
+                name: "quarter_id_FK",
+                using: "BTREE",
+                fields: [
+                    {name: "quarter_id"},
                 ]
             },
         ]
