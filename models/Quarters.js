@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
         tableName: "Quarters",
         modelName: "Quarters",
         comment: "Пользователи",
-        timestamps: true,
+        timestamps: false,
         engine: "InnoDB",
         charset: "utf8",
         collate: "utf8_general_ci",
