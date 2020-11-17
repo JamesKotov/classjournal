@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             models.Lessons.belongsTo(models.Groups, {foreignKey: "group_id"});
             models.Lessons.belongsTo(models.Subjects, {foreignKey: "subject_id"});
             models.Lessons.hasMany(models.Marks, {foreignKey: "lesson_id"});
-            models.Lessons.hasMany(models.Quarters, {foreignKey: "quarter_id"});
+            models.Lessons.belongsTo(models.Quarters, {foreignKey: "quarter_id"});
         }
     }
 
