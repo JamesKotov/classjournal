@@ -26,18 +26,30 @@
                 </th>
                 <% skillsets.forEach( function(item) {
                     const skills = getMarksForSkill(item.skill_id, absence_skill_id);
-                    const is_disabled = isCurrentMark(marks, lesson.id, student.id, absence_skill_id, getMarksForSkill(absence_skill_id, absence_skill_id)[0]);
+                    const is_absense_skill = item.skill_id === absence_skill_id;
+                    const is_disabled = isCurrentMark(marks, lesson.id, student.id, absence_skill_id, getMarksForSkill(absence_skill_id, absence_skill_id)[1]);
                 %>
-                <td class="align-middle text-center" id="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>">
-                    <% if(item.skill_id === absence_skill_id) { %>
+                <td class="align-middle <%=is_absense_skill ? 'text-left' : 'text-center'%>"
+                    id="<%= lesson.id %>_<%=student.id%>_<%=item.skill_id %>">
+                    <% if(is_absense_skill) {
+                        const hasMark = skills.map(mark => isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark)).filter(Boolean).length > 0
+                    %>
+                        <div class="my-1">
                         <% skills.forEach( function(mark) {
-                            const is_current = isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark);
+                            const is_current = (!mark && !hasMark) || isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark);
                         %>
-                        <input type="checkbox" class="mark absense-mark"
-                               value="<%= encodeURIComponent(mark) %>"
-                                <%= is_current ? 'checked="checked"' : '' %>
-                               name="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>"/>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="mark absense-mark custom-control-input"
+                                   id="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>_<%= mark %>"
+                                   name="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>"
+                                   value="<%= encodeURIComponent(mark) %>"
+                                    <%= is_current ? 'checked="checked"' : '' %>>
+                            <label class="custom-control-label" for="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>_<%= mark %>">
+                                <%=absesne_marks_labels[mark]%>
+                            </label>
+                        </div>
                         <% }); %>
+                        </div>
                     <% } else { %>
                         <select class="form-control form-control-sm mark value-mark"
                                 <%= is_disabled ? 'disabled="disabled"' : '' %>

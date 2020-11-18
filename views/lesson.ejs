@@ -20,10 +20,10 @@
 <div class="tab-content">
     <div class="tab-pane active" id="content_marks">
 
-        <% skillsets.forEach( function(item) { %>
+        <% skillsets.forEach( function(item) { const is_absense_skill = item.skill_id === absence_skill_id; %>
             <div class="d-block d-md-inline-block my-4 mx-3 text-center">
                 <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id])%>"
-                   class="btn btn-primary">
+                   class="btn <%=is_absense_skill ? 'btn-light border-dark' : 'btn-primary'%>">
                     <%= item.Skill.name %>
                 </a>
             </div>

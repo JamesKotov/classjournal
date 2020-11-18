@@ -1,7 +1,5 @@
 'use strict';
 
-const sequelize = require("sequelize");
-
 const config = require('../config/config');
 const {makeUrl} = require('../utils/make-url');
 const {isMarkValid} = require('../utils/marks');
@@ -88,15 +86,6 @@ module.exports = async (ctx) => {
                         mark: value,
                     }, ['mark']);
 
-                    if (skill_id === config.absence_skill_id) {
-                        await Marks.destroy({
-                            where: {
-                                lesson_id: lesson.id,
-                                student_id: student.id,
-                                skill_id: {[sequelize.Op.not]: skill_id}
-                            }
-                        });
-                    }
                 }
             }
         }
@@ -116,6 +105,13 @@ module.exports = async (ctx) => {
         {name: group.name, path: makeUrl(['groups', group.id])},
         {name: lesson_title, path: makeUrl(['groups', group.id, 'lessons', lesson.id])},
     ];
+
+    // noinspection NonAsciiCharacters
+    ctx.state.absesne_marks_labels = {
+        '': 'Присутствует',
+        'Н': 'Отсутствует',
+        'Д': 'Дистанционно',
+    }
 
     const template = 'lesson-skill-mark';
     return ctx.render(template, {})

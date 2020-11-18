@@ -5,9 +5,9 @@ const all_marks = Marks.rawAttributes['mark'].values;
 
 function getMarksForSkill(skill_id, absence_skill_id) {
     if (skill_id === absence_skill_id) {
-        return all_marks.slice(0, 1);
+        return [''].concat(all_marks.slice(0, 2));
     }
-    return [''].concat(all_marks.slice(1))
+    return [''].concat(all_marks.slice(2))
 }
 
 function isCurrentMark(marks, lesson_id, student_id, skill_id, mark) {

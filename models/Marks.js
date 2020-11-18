@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         mark: {
-            type: DataTypes.ENUM("Н", "2", "3-", "3", "3+", "4-", "4", "4+", "5-", "5", "5+"),
+            type: DataTypes.ENUM("Н", "Д", "2", "3-", "3", "3+", "4-", "4", "4+", "5-", "5", "5+"),
             allowNull: false,
             comment: "оценка"
         }
