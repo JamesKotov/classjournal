@@ -27,4 +27,8 @@ function formatDateTime(date) {
     return fixTz(date).toISOString().replace('T', ' ').split('.')[0];
 }
 
-module.exports = {formatDate, formatDateShort, formatDateTime};
+function formatTime(timestring) {
+    return timestring.split(':').slice(0,2).join(':');
+}
+
+module.exports = {formatDate, formatDateShort, formatDateTime, formatTime};

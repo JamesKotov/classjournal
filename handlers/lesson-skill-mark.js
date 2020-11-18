@@ -3,6 +3,7 @@
 const config = require('../config/config');
 const {makeUrl} = require('../utils/make-url');
 const {isMarkValid} = require('../utils/marks');
+const {formatDateShort} = require('../utils/format-date');
 const {Marks, SkillSets, Skills, Subjects} = require('../models');
 
 module.exports = async (ctx) => {
@@ -103,7 +104,7 @@ module.exports = async (ctx) => {
     ctx.state.breadcrumbs = [
         {name: "Группы", path: makeUrl(['groups'])},
         {name: group.name, path: makeUrl(['groups', group.id])},
-        {name: lesson_title, path: makeUrl(['groups', group.id, 'lessons', lesson.id])},
+        {name: formatDateShort(new Date(lesson.date)) + ' &ndash; ' + lesson_title, path: makeUrl(['groups', group.id, 'lessons', lesson.id])},
     ];
 
     // noinspection NonAsciiCharacters

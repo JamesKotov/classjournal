@@ -6,11 +6,24 @@
         <dd class="col-sm-12">
             <ul>
                 <% lessons[date].forEach(lesson => { %>
-                    <li>
-                        <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id])%>">
-                            <%- [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ') %>
-                        </a>
-                    </li>
+                <li>
+                    <a href="<%= makeUrl(['groups', group.id, 'lessons', lesson.id]) %>">
+                        <%- [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ') %>
+                    </a>
+                    <% let remark = ''
+                        const flags = []
+                        if (lesson.is_distant) {
+                            flags.push('дистанционный')
+                        }
+                        if (lesson.is_control) {
+                            flags.push('контрольный')
+                        }
+                        if (flags.length) {
+                            remark = '(' + flags.join(', ') + ')';
+                        }
+                    %>
+                    <%=remark%>
+                </li>
                 <% }); %>
             </ul>
         </dd>

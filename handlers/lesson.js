@@ -55,7 +55,7 @@ module.exports = async (ctx) => {
     const used_skills = [...new Set(ctx.state.marks.map(m => m.skill_id))]
     ctx.state.used_skills = ctx.state.skillsets.filter(s => used_skills.indexOf(s.skill_id) >= 0)
 
-    ctx.state.title = [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ')
+    ctx.state.title = lesson.Subject.name;
 
     ctx.state.breadcrumbs = [
         {name: "Группы", path: makeUrl(['groups'])},

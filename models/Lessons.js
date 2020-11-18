@@ -75,6 +75,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: true,
             comment: "дистант?"
+        },
+        is_control: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            comment: "контрольный урок?"
         }
     }, {
         sequelize,

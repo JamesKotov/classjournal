@@ -1,10 +1,27 @@
 <p>
     <%= formatDateShort(new Date(lesson.date)) %>
     <% if(lesson.time) { %>
-        <%= lesson.time %>
+        в <%= formatTime(lesson.time) %>
+    <% } %>
+    <% let remark = ''
+    const flags = []
+    if (lesson.is_distant) {
+        flags.push('дистанционный')
+    }
+    if (lesson.is_control) {
+        flags.push('контрольный')
+    }
+    if (flags.length) {
+        remark = '(' + flags.join(', ') + ')';
+    }
+    if (lesson.is_distant) {
+    %>
+        <%= remark %>
     <% } %>
 </p>
-
+<% if(lesson.topic) { %>
+    <p><b>Тема: </b><%= lesson.topic %></p>
+<% } %>
 
 <ul id="menuTabs" class="nav nav-tabs">
     <li class="nav-item" id="marks">
@@ -21,12 +38,12 @@
     <div class="tab-pane active" id="content_marks">
 
         <% skillsets.forEach( function(item) { const is_absense_skill = item.skill_id === absence_skill_id; %>
-            <div class="d-block d-md-inline-block my-4 mx-3 text-center">
-                <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id])%>"
-                   class="btn <%=is_absense_skill ? 'btn-light border-dark' : 'btn-primary'%>">
-                    <%= item.Skill.name %>
-                </a>
-            </div>
+        <div class="d-block d-md-inline-block my-4 mx-3 text-center">
+            <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id])%>"
+               class="btn <%=is_absense_skill ? 'btn-light border-dark' : 'btn-primary'%>">
+                <%= item.Skill.name %>
+            </a>
+        </div>
         <% }); %>
 
     </div>
@@ -37,11 +54,11 @@
                 <tr>
                     <th scope="col" class="align-middle">Ученики</th>
                     <% used_skills.forEach( function(item) { %>
-                        <th scope="col" class="text-center skill-title">
-                            <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id])%>">
-                                <%= item.Skill.name %>
-                            </a>
-                        </th>
+                    <th scope="col" class="text-center skill-title">
+                        <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id])%>">
+                            <%= item.Skill.name %>
+                        </a>
+                    </th>
                     <% }); %>
                 </tr>
                 </thead>
@@ -58,9 +75,9 @@
                         <td class="align-middle text-center">
                             <% skills.forEach( function(mark) { %>
                                 <% if (isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark)) {%>
-                                    <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id], [lesson.id, student.id, item.skill_id])%>">
-                                        <%=mark%>
-                                    </a>
+                                <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id], [lesson.id, student.id, item.skill_id])%>">
+                                    <%=mark%>
+                                </a>
                                 <% } %>
                             <% }) %>
                         </td>

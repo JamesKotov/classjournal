@@ -24,8 +24,8 @@ const logger = require('./utils/logger')
 const menu = require('./menu/menu.json')
 const config = require('./config/config')
 const {makeUrl} = require('./utils/make-url');
-const {formatDateShort} = require('./utils/format-date')
 const {getMarksForSkill, isCurrentMark} = require('./utils/marks')
+const {formatDateShort, formatTime} = require('./utils/format-date')
 
 
 logger.info('~~~ Starting ClassJournal APP ~~~');
@@ -130,6 +130,7 @@ app
             ctx.state.user = null;
             ctx.state.breadcrumbs = [];
             ctx.state.formatDateShort = formatDateShort;
+            ctx.state.formatTime = formatTime;
             ctx.state.getMarksForSkill = getMarksForSkill;
             ctx.state.isCurrentMark = isCurrentMark;
             ctx.state.makeUrl = makeUrl;
