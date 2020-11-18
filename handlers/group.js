@@ -1,5 +1,6 @@
 'use strict';
 
+const {getTemplate} = require('../utils/get-template');
 const {makeUrl} = require('../utils/make-url');
 const {Subjects} = require('../models')
 
@@ -14,8 +15,7 @@ module.exports = async (ctx) => {
     });
 
     if (!groups.length) {
-        const template = '404';
-        return ctx.render(template, {})
+        return ctx.render('404', {})
     }
 
     const group = groups[0]
@@ -37,6 +37,5 @@ module.exports = async (ctx) => {
         {name: "Группы", path: makeUrl(['groups'])},
     ];
 
-    const template = 'group';
-    return ctx.render(template, {})
+    return ctx.render(getTemplate(__filename), {})
 };

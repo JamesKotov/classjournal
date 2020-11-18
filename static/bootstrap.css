@@ -11091,3 +11091,9 @@ a.text-dark:hover, a.text-dark:focus {
     overflow-wrap: break-word;
 }
 
+.tab-border {
+    border: 1px solid;
+    border-color: transparent #dee2e6 #dee2e6;
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}

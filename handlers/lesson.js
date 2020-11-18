@@ -1,6 +1,7 @@
 'use strict';
 
 const {makeUrl} = require('../utils/make-url');
+const {getTemplate} = require('../utils/get-template');
 const {SkillSets, Skills, Subjects} = require('../models');
 
 module.exports = async (ctx) => {
@@ -15,8 +16,7 @@ module.exports = async (ctx) => {
     });
 
     if (!groups.length) {
-        const template = '404';
-        return ctx.render(template, {})
+        return ctx.render('404', {})
     }
 
     const group = groups[0]
@@ -29,8 +29,7 @@ module.exports = async (ctx) => {
     });
 
     if (!lessons.length) {
-        const template = '404';
-        return ctx.render(template, {})
+        return ctx.render('404', {})
     }
 
     const lesson = lessons[0]
@@ -62,6 +61,5 @@ module.exports = async (ctx) => {
         {name: group.name, path: makeUrl(['groups', group.id])},
     ];
 
-    const template = 'lesson';
-    return ctx.render(template, {})
+    return ctx.render(getTemplate(__filename), {})
 };

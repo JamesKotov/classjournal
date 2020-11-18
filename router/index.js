@@ -46,7 +46,11 @@ router
 
     .get('/groups', authenticated(), require('../handlers/groups'))
     .get('/groups/:group_id', authenticated(), require('../handlers/group'))
+    .get('/groups/:group_id/add_lesson', authenticated(), require('../handlers/edit_lesson'))
+    .post('/groups/:group_id/add_lesson', authenticated(), require('../handlers/edit_lesson'))
     .get('/groups/:group_id/lessons/:lesson_id', authenticated(), require('../handlers/lesson'))
+    .get('/groups/:group_id/lessons/:lesson_id/edit', authenticated(), require('../handlers/edit_lesson'))
+    .post('/groups/:group_id/lessons/:lesson_id/edit', authenticated(), require('../handlers/edit_lesson'))
     .get('/groups/:group_id/lessons/:lesson_id/skill/:skill_id', authenticated(), require('../handlers/lesson-skill-mark'))
     .post('/groups/:group_id/lessons/:lesson_id/skill/:skill_id', authenticated(), require('../handlers/lesson-skill-mark'))
 

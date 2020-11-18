@@ -3,6 +3,7 @@
 const config = require('../config/config');
 const {makeUrl} = require('../utils/make-url');
 const {isMarkValid} = require('../utils/marks');
+const {getTemplate} = require('../utils/get-template');
 const {formatDateShort} = require('../utils/format-date');
 const {Marks, SkillSets, Skills, Subjects} = require('../models');
 
@@ -19,8 +20,7 @@ module.exports = async (ctx) => {
     });
 
     if (!groups.length) {
-        const template = '404';
-        return ctx.render(template, {})
+        return ctx.render('404', {})
     }
 
     const group = groups[0]
@@ -33,8 +33,7 @@ module.exports = async (ctx) => {
     });
 
     if (!lessons.length) {
-        const template = '404';
-        return ctx.render(template, {})
+        return ctx.render('404', {})
     }
 
     const lesson = lessons[0]
@@ -52,8 +51,7 @@ module.exports = async (ctx) => {
     })
 
     if (!ctx.state.skillsets.length) {
-        const template = '404';
-        return ctx.render(template, {})
+        return ctx.render('404', {})
     }
 
     ctx.state.students = await group.getStudents({
@@ -97,14 +95,12 @@ module.exports = async (ctx) => {
 
     ctx.state.marks = await lesson.getMarks()
 
-    ctx.state.title = ctx.state.skillsets[0].Skill.name;
-
-    const lesson_title = [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ')
+    ctx.state.title = lesson.topic || ctx.state.skillsets[0].Skill.name;
 
     ctx.state.breadcrumbs = [
         {name: "Группы", path: makeUrl(['groups'])},
         {name: group.name, path: makeUrl(['groups', group.id])},
-        {name: formatDateShort(new Date(lesson.date)) + ' &ndash; ' + lesson_title, path: makeUrl(['groups', group.id, 'lessons', lesson.id])},
+        {name: formatDateShort(new Date(lesson.date)) + ' &ndash; ' + lesson.Subject.name, path: makeUrl(['groups', group.id, 'lessons', lesson.id])},
     ];
 
     // noinspection NonAsciiCharacters
@@ -114,8 +110,7 @@ module.exports = async (ctx) => {
         'Д': 'Дистанционно',
     }
 
-    const template = 'lesson-skill-mark';
-    return ctx.render(template, {})
+    return ctx.render(getTemplate(__filename), {})
 };
 
 function getMarkKey(lesson_id, student_id, skill_id) {

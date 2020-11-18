@@ -1,7 +1,8 @@
 'use strict';
 
+const {getTemplate} = require('../utils/get-template');
+
 module.exports = async (ctx) => {
     ctx.state.title = "";
-    const template = 'login-form';
-    return ctx.render(template, {})
+    return ctx.render(getTemplate(__filename), {})
 };

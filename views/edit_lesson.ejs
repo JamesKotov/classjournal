@@ -1,0 +1,77 @@
+<div class="row">
+    <div class="col-sm">
+    </div>
+    <div class="col">
+        <% if(Object.keys(errors).length) { %>
+            <div class="my-4 alert alert-danger" role="alert">Не удалось сохранить урок!</div>
+        <% } %>
+        <form method="post" action="">
+            <div class="form-group">
+                <label for="quarter_id">Четверть</label>
+                <select class="form-control <%= errors.quarter_id ? 'is-invalid' : ''%>"
+                        id="quarter_id" name="quarter_id">
+                    <% quarters.forEach(q => { %>
+                        <option value="<%= q.id %>" <%= q.id === lesson.quarter_id ? 'selected="selected"' : '' %> >
+                            <%= q.name %>
+                        </option>
+                    <% }); %>
+                </select>
+                <div class="invalid-feedback"><%= errors.quarter_id %></div>
+            </div>
+
+            <div class="form-group">
+                <label for="datetime">Дата и время</label>
+                <input type="datetime-local" name="datetime" class="form-control  <%= errors.datetime ? 'is-invalid' : ''%>"
+                       id="datetime" value="<%=lesson.datetime%>">
+                <div class="invalid-feedback"><%= errors.datetime %></div>
+            </div>
+
+            <div class="form-group">
+                <label for="subject_id">Предмет</label>
+                <select class="form-control <%= errors.subject_id ? 'is-invalid' : ''%>"
+                        id="subject_id" name="subject_id">
+                    <option value=""></option>
+                    <% subjects.forEach(s => { %>
+                        <option value="<%= s.id %>" <%= s.id === lesson.subject_id ? 'selected="selected"' : '' %>>
+                            <%= s.name %>
+                        </option>
+                    <% }); %>
+                </select>
+                <div class="invalid-feedback"><%= errors.subject_id %></div>
+            </div>
+
+            <div class="form-group">
+                <label for="topic">Тема</label>
+                <input type="text" class="form-control <%= errors.topic ? 'is-invalid' : ''%>"
+                       name="topic" id="topic" value="<%=lesson.topic%>">
+                <div class="invalid-feedback"><%= errors.topic %></div>
+            </div>
+
+            <div class="form-group">
+                <label for="task">Задание</label>
+                <textarea class="form-control <%= errors.task ? 'is-invalid' : ''%>"
+                          id="task" name="task" rows="3"><%=lesson.task%></textarea>
+                <div class="invalid-feedback"><%= errors.task %></div>
+            </div>
+
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="is_distant" name="is_distant"
+                        <%= lesson.is_distant ? 'checked="checked"' : ''%>>
+                <label class="form-check-label" for="is_distant">Дистанционный?</label>
+            </div>
+
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="is_control" name="is_control"
+                        <%= lesson.is_control ? 'checked="checked"' : ''%>>
+                <label class="form-check-label" for="is_control">Контрольный?</label>
+            </div>
+
+            <div class="text-center my-4">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <a href="<%=return_url%>" class="btn border-danger">Отмена</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm">
+    </div>
+</div>

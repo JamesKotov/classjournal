@@ -19,28 +19,35 @@
         <%= remark %>
     <% } %>
 </p>
+
 <% if(lesson.topic) { %>
     <p><b>Тема: </b><%= lesson.topic %></p>
 <% } %>
 
+<% if(lesson.task) { %>
+    <p><b>Задание: </b><%= lesson.task %></p>
+<% } %>
+
+<p class="text-center">
+    <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'edit'])%>"
+       class="btn btn-light border-dark">Редактировать урок</a>
+</p>
+
 <ul id="menuTabs" class="nav nav-tabs">
     <li class="nav-item" id="marks">
-        <a class="nav-link active" href="#">Отметки</a>
+        <a class="nav-link active" href="#">Выставление отметок</a>
     </li>
     <li class="nav-item" id="summary">
         <a class="nav-link" href="#">Сводка</a>
     </li>
-    <li class="nav-item" id="task">
-        <a class="nav-link" href="#">Задание</a>
-    </li>
 </ul>
-<div class="tab-content">
+<div class="tab-content tab-border px-1">
     <div class="tab-pane active" id="content_marks">
 
         <% skillsets.forEach( function(item) { const is_absense_skill = item.skill_id === absence_skill_id; %>
         <div class="d-block d-md-inline-block my-4 mx-3 text-center">
             <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id])%>"
-               class="btn <%=is_absense_skill ? 'btn-light border-dark' : 'btn-primary'%>">
+               class="btn <%=is_absense_skill ? 'btn-light border-primary text-primary' : 'btn-primary'%>">
                 <%= item.Skill.name %>
             </a>
         </div>
@@ -86,15 +93,6 @@
                 <% }); %>
                 </tbody>
             </table>
-        </div>
-    </div>
-    <div class="tab-pane" id="content_task">
-        <div class="my-4">
-            <% if(lesson.task) { %>
-                <%= lesson.task %>
-            <% } else { %>
-                Нет задания.
-            <% } %>
         </div>
     </div>
 </div>
