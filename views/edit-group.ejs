@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-sm">
+    </div>
+    <div class="col">
+        <% if(Object.keys(errors).length) { %>
+            <div class="my-4 alert alert-danger" role="alert">Не удалось сохранить группу!</div>
+        <% } %>
+        <form method="post" action="">
+
+            <div class="form-group">
+                <label for="name">Название</label>
+                <input type="text" class="form-control <%= errors.name ? 'is-invalid' : ''%>"
+                       name="name" id="name" value="<%=group.name%>">
+                <div class="invalid-feedback"><%= errors.name %></div>
+            </div>
+
+            <div class="form-group">
+                <label for="class">Класс</label>
+                <select class="form-control <%= errors.class ? 'is-invalid' : ''%>"
+                        id="class" name="class">
+                    <option value=""></option>
+                    <% for (let i = -1; i <= 9 ; i++) { %>
+                        <option value="<%= i %>" <%= i === group.class ? 'selected="selected"' : '' %> >
+                            <%= class_labels[i+''] ? class_labels[i+''] : i %>
+                        </option>
+                    <% } %>
+                </select>
+                <div class="invalid-feedback"><%= errors.class %></div>
+            </div>
+
+            <div class="text-center my-4">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <a href="<%=return_url%>" class="btn border-danger">Отмена</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm">
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<ul>
+    <% students.forEach( function(student) { %>
+    <li>
+        <a href="<%=makeUrl(['students', student.id])%>"><%= student.surname %> <%= student.name %></a>,
+        <%= student.Groups[0].name %>
+    </li>
+    <% }); %>
+</ul>
+<div class="m-4 text-center">
+    <a href="<%= makeUrl(['students', 'add_student']) %>" class="btn btn-success">Добавить ученика</a>
+</div>

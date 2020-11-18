@@ -1,9 +1,12 @@
 <ul>
     <% groups.forEach( function(group) { %>
         <li>
-            <a href="<%=makeUrl(['groups', group.id,])%>">
+            <a href="<%=makeUrl(['groups', group.id])%>">
                 <%= group.name %>
             </a>
         </li>
     <% }); %>
 </ul>
+<div class="m-4 text-center">
+    <a href="<%= makeUrl(['groups', 'add_group']) %>" class="btn btn-success">Добавить группу</a>
+</div>

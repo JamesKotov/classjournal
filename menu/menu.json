@@ -3,6 +3,10 @@
     "path": "/groups",
     "name": "Группы"
   },
+  "students": {
+    "path": "/students",
+    "name": "Ученики"
+  },
   "logout": {
     "path": "/logout",
     "name": "Выход"

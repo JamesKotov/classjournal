@@ -123,7 +123,7 @@ module.exports = async (ctx) => {
 
 
         if (!Object.keys(ctx.state.errors).length) {
-            ctx.state.lesson.save();
+            await ctx.state.lesson.save();
 
             return ctx.redirect(ctx.state.return_url);
         }

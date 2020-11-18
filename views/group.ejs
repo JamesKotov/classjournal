@@ -1,34 +1,85 @@
-<dl class="row">
-    <% Object.keys(lessons).sort().forEach( function(date) { %>
-        <dt class="col-sm-12">
-            <%= formatDateShort(new Date(date)) %>
-        </dt>
-        <dd class="col-sm-12">
-            <ul>
-                <% lessons[date].forEach(lesson => { %>
-                <li>
-                    <a href="<%= makeUrl(['groups', group.id, 'lessons', lesson.id]) %>">
-                        <%- [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ') %>
-                    </a>
-                    <% let remark = ''
-                        const flags = []
-                        if (lesson.is_distant) {
-                            flags.push('дистанционный')
-                        }
-                        if (lesson.is_control) {
-                            flags.push('контрольный')
-                        }
-                        if (flags.length) {
-                            remark = '(' + flags.join(', ') + ')';
-                        }
-                    %>
-                    <%=remark%>
-                </li>
+<p class="text-center">
+    <a href="<%=makeUrl(['groups', group.id, 'edit'])%>"
+       class="btn btn-light border-dark">Редактировать группу</a>
+</p>
+
+<ul id="menuTabs" class="nav nav-tabs">
+    <li class="nav-item" id="lessons">
+        <a class="nav-link active" href="#">Уроки</a>
+    </li>
+    <li class="nav-item" id="students">
+        <a class="nav-link" href="#">Ученики</a>
+    </li>
+    <li class="nav-item" id="reports">
+        <a class="nav-link" href="#">Отчеты</a>
+    </li>
+</ul>
+<div class="tab-content tab-border">
+    <div class="tab-pane active" id="content_lessons">
+        <div class="my-4 mx-3">
+            <dl class="row">
+                <% Object.keys(lessons).sort().forEach( function(date) { %>
+                    <dt class="col-sm-12">
+                        <%= formatDateShort(new Date(date)) %>
+                    </dt>
+                    <dd class="col-sm-12">
+                        <ul>
+                            <% lessons[date].forEach(lesson => { %>
+                                <li>
+                                    <a href="<%= makeUrl(['groups', group.id, 'lessons', lesson.id]) %>">
+                                        <%- [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ') %>
+                                    </a>
+                                    <% let remark = ''
+                                        const flags = []
+                                        if (lesson.is_distant) {
+                                            flags.push('дистанционный')
+                                        }
+                                        if (lesson.is_control) {
+                                            flags.push('контрольный')
+                                        }
+                                        if (flags.length) {
+                                            remark = '(' + flags.join(', ') + ')';
+                                        }
+                                    %>
+                                    <%= remark %>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </dd>
                 <% }); %>
-            </ul>
-        </dd>
-    <% }); %>
-</dl>
-<div class="m-4 text-center">
-    <a href="<%= makeUrl(['groups', group.id, 'add_lesson']) %>" class="btn btn-success">Добавить урок</a>
+            </dl>
+            <div class="m-4 text-center">
+                <a href="<%= makeUrl(['groups', group.id, 'add_lesson']) %>" class="btn btn-success">Добавить урок</a>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="content_students">
+        <div class="my-4 mx-3">
+
+            <% students.forEach( function(student) { %>
+                <p>
+                    <a href="<%= makeUrl(['groups', group.id, 'students', student.id]) %>">
+                        <%= student.surname %>
+                        <%= student.name %>
+                    </a>
+                </p>
+            <% }); %>
+
+            <div class="m-4 text-center">
+                <a href="<%= makeUrl(['groups', group.id, 'add_student']) %>"
+                   class="btn btn-success">Добавить ученика</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="tab-pane" id="content_reports">
+        <div class="my-4 mx-3">
+            Отчетов пока нет :)
+        </div>
+    </div>
 </div>
+
+
+
+
+

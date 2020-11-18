@@ -31,6 +31,10 @@ module.exports = async (ctx) => {
         return accumulator;
     }, {});
 
+    ctx.state.students = await group.getStudents({
+        order: ["surname", "name"]
+    });
+
     ctx.state.title = group.name;
 
     ctx.state.breadcrumbs = [

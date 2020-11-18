@@ -41,7 +41,7 @@
         <a class="nav-link" href="#">Сводка</a>
     </li>
 </ul>
-<div class="tab-content tab-border px-1">
+<div class="tab-content tab-border">
     <div class="tab-pane active" id="content_marks">
 
         <% skillsets.forEach( function(item) { const is_absense_skill = item.skill_id === absence_skill_id; %>
@@ -55,7 +55,7 @@
 
     </div>
     <div class="tab-pane" id="content_summary">
-        <div class="table-responsive mt-4">
+        <div class="table-responsive my-4 px-1">
             <table class="table table-striped table-bordered table-hover table-sm">
                 <thead>
                 <tr>
