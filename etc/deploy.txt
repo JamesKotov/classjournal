@@ -1,0 +1,34 @@
+1.
+cd /opt
+
+2.
+git clone https://github.com/JamesKotov/classjournal.git
+
+3.
+cd ./classjournal
+
+4.
+sudo nano /etc/systemd/system/classjournal.service
+
+5.
+[Unit]
+Description="ClassJournal App"
+
+[Service]
+ExecStart=/usr/local/bin/node /opt/classjournal/index.js
+WorkingDirectory=/opt/classjournal
+Restart=always
+RestartSec=10
+StandardOutput=file:/opt/classjournal/log.log
+StandardError=file:/opt/classjournal/log.log
+SyslogIdentifier=ClassJournal
+Environment=NODE_ENV=production PORT=3007 HASH_SECRET=some_value LOG_LEVEL=debug DB_DSN=mysql://login:password@localhost/classjournal
+
+[Install]
+WantedBy=multi-user.target
+
+6.
+sudo systemctl enable classjournal.service
+
+7.
+./deploy.sh
