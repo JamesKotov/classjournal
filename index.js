@@ -4,6 +4,7 @@ const fs = require('fs');
 const Koa = require('koa')
 const path = require('path')
 const zlib = require('zlib')
+const crypto = require('crypto')
 const render = require('koa-ejs')
 const session = require('koa-session')
 const compress = require('koa-compress')
@@ -13,17 +14,18 @@ const bodyParser = require('koa-bodyparser')
 const {KoaReqLogger} = require('koa-req-logger')
 const cacheControl = require('koa-cache-control')
 const koaValidator = require('koa-async-validator')
+const LocalStrategy = require('passport-local').Strategy
 
 
-require('./utils/auth')
 const db = require('./models')
 const router = require('./router')
-const logger = require('./utils/logger');
-const config = require('./config/config');
-const menu = require('./menu/menu.json');
-const {formatDateShort} = require('./utils/format-date');
-const {getMarksForSkill, isCurrentMark} = require('./utils/marks');
+const {Users} = require('./models')
+const logger = require('./utils/logger')
+const menu = require('./menu/menu.json')
+const config = require('./config/config')
 const {makeUrl} = require('./utils/make-url');
+const {formatDateShort} = require('./utils/format-date')
+const {getMarksForSkill, isCurrentMark} = require('./utils/marks')
 
 
 logger.info('~~~ Starting ClassJournal APP ~~~');
@@ -33,6 +35,37 @@ const koaLogger = new KoaReqLogger({
     pinoInstance: logger,
     alwaysError: true // treat all non-2** http codes as error records in logs
 });
+
+
+passport.serializeUser((user, done) => {
+    done(null, user.id)
+})
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await Users.findByPk(id)
+        done(null, user)
+    } catch (err) {
+        done(err)
+    }
+})
+passport.use(new LocalStrategy(async (username, password, done) => {
+        const user = await Users.findOne({
+            where: {
+                email: username
+            }
+        });
+        if (user) {
+            if (user.password === crypto.scryptSync(password, config.hashSecret, 64).toString('hex')) {
+                done(null, user);
+            } else {
+                done(null, false)
+            }
+        } else {
+            done(null, false)
+        }
+    }
+))
 
 const viewsDir = path.join(__dirname, 'views');
 const modifiedTimes = []
@@ -102,10 +135,6 @@ app
             ctx.state.makeUrl = makeUrl;
             ctx.state.encodeURIComponent = encodeURIComponent;
             ctx.state.absence_skill_id = config.absence_skill_id;
-            /*ctx.state.declension = declension;
-            ctx.state.formatDateTime = formatDateTime;
-            ctx.state.formatMoney = formatMoney;
-            ctx.state.genderify = genderify;*/
             ctx.state.lastModified = lastModified;
 
             await next()

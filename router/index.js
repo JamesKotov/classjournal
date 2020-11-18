@@ -1,7 +1,15 @@
 const Router = require('koa-router');
 const passport = require('koa-passport');
 
-const {authenticated} = require('../utils');
+const authenticated = () => {
+    return (ctx, next) => {
+        if (ctx.isAuthenticated()) {
+            return next()
+        } else {
+            ctx.redirect('/login')
+        }
+    }
+}
 
 const router = new Router()
 
