@@ -1,9 +1,9 @@
 'use strict';
 
-const urljoin = require('url-join');
 const sequelize = require("sequelize");
 
 const config = require('../config/config');
+const {makeUrl} = require('../utils/make-url');
 const {isMarkValid} = require('../utils/marks');
 const {Marks, SkillSets, Skills, Subjects} = require('../models');
 
@@ -112,9 +112,9 @@ module.exports = async (ctx) => {
     const lesson_title = [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ')
 
     ctx.state.breadcrumbs = [
-        {name: "Группы", path: '/groups'},
-        {name: group.name, path: urljoin('/groups', group.id + '')},
-        {name: lesson_title, path: urljoin('/groups', group.id + '', '/lessons', lesson.id + '')},
+        {name: "Группы", path: makeUrl(['groups'])},
+        {name: group.name, path: makeUrl(['groups', group.id])},
+        {name: lesson_title, path: makeUrl(['groups', group.id, 'lessons', lesson.id])},
     ];
 
     const template = 'lesson-skill-mark';

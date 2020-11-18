@@ -1,7 +1,7 @@
 <ul>
     <% groups.forEach( function(group) { %>
         <li>
-            <a href="/groups/<%= group.id %>">
+            <a href="<%=makeUrl(['groups', group.id,])%>">
                 <%= group.name %>
             </a>
         </li>

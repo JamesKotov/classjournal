@@ -1,5 +1,6 @@
 'use strict';
 
+const {makeUrl} = require('../utils/make-url');
 const {Subjects} = require('../models')
 
 module.exports = async (ctx) => {
@@ -33,7 +34,7 @@ module.exports = async (ctx) => {
     ctx.state.title = group.name;
 
     ctx.state.breadcrumbs = [
-        {name: "Группы", path: '/groups'},
+        {name: "Группы", path: makeUrl(['groups'])},
     ];
 
     const template = 'group';

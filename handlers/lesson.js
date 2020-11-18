@@ -1,7 +1,6 @@
 'use strict';
 
-const urljoin = require('url-join');
-
+const {makeUrl} = require('../utils/make-url');
 const {SkillSets, Skills, Subjects} = require('../models');
 
 module.exports = async (ctx) => {
@@ -59,8 +58,8 @@ module.exports = async (ctx) => {
     ctx.state.title = [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ')
 
     ctx.state.breadcrumbs = [
-        {name: "Группы", path: '/groups'},
-        {name: group.name, path: urljoin('/groups', group.id+'')},
+        {name: "Группы", path: makeUrl(['groups'])},
+        {name: group.name, path: makeUrl(['groups', group.id])},
     ];
 
     const template = 'lesson';

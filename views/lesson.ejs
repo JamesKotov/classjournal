@@ -22,7 +22,7 @@
 
         <% skillsets.forEach( function(item) { %>
             <div class="d-block d-md-inline-block my-4 mx-3 text-center">
-                <a href="/groups/<%= group.id %>/lessons/<%= lesson.id %>/skill/<%= item.skill_id %>"
+                <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id])%>"
                    class="btn btn-primary">
                     <%= item.Skill.name %>
                 </a>
@@ -38,7 +38,9 @@
                     <th scope="col" class="align-middle">Ученики</th>
                     <% used_skills.forEach( function(item) { %>
                         <th scope="col" class="text-center skill-title">
-                            <%= item.Skill.name %>
+                            <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id])%>">
+                                <%= item.Skill.name %>
+                            </a>
                         </th>
                     <% }); %>
                 </tr>
@@ -56,7 +58,7 @@
                         <td class="align-middle text-center">
                             <% skills.forEach( function(mark) { %>
                                 <% if (isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark)) {%>
-                                    <a href="/groups/<%= group.id %>/lessons/<%= lesson.id %>/skill/<%= item.skill_id%>#<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>">
+                                    <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id], [lesson.id, student.id, item.skill_id])%>">
                                         <%=mark%>
                                     </a>
                                 <% } %>

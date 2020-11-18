@@ -1,6 +1,6 @@
 <div class="mt-4">
-    <a href="/groups/<%= group.id %>/lessons/<%= lesson.id %>" class="btn btn-success">&larr; Назад, к уроку</a>
-    <a href="/groups/<%= group.id %>/lessons/<%= lesson.id %>#summary" class="btn btn-info">Сводка</a>
+    <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id])%>" class="btn btn-success">&larr; Назад, к уроку</a>
+    <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id], ['summary'])%>" class="btn btn-info">Сводка</a>
 </div>
 
 <div id="mark-save-alert" class="d-none mt-4 alert alert-danger" role="alert">

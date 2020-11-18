@@ -23,6 +23,7 @@ const config = require('./config/config');
 const menu = require('./menu/menu.json');
 const {formatDateShort} = require('./utils/format-date');
 const {getMarksForSkill, isCurrentMark} = require('./utils/marks');
+const {makeUrl} = require('./utils/make-url');
 
 
 logger.info('~~~ Starting ClassJournal APP ~~~');
@@ -98,6 +99,7 @@ app
             ctx.state.formatDateShort = formatDateShort;
             ctx.state.getMarksForSkill = getMarksForSkill;
             ctx.state.isCurrentMark = isCurrentMark;
+            ctx.state.makeUrl = makeUrl;
             ctx.state.encodeURIComponent = encodeURIComponent;
             ctx.state.absence_skill_id = config.absence_skill_id;
             /*ctx.state.declension = declension;

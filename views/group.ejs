@@ -7,7 +7,7 @@
             <ul>
                 <% lessons[date].forEach(lesson => { %>
                     <li>
-                        <a href="/groups/<%= group.id %>/lessons/<%= lesson.id %>">
+                        <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id])%>">
                             <%- [lesson.Subject.name, lesson.topic].filter(Boolean).join('&nbsp;&ndash; ') %>
                         </a>
                     </li>
