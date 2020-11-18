@@ -117,12 +117,10 @@ module.exports = async (ctx) => {
         ctx.state.lesson.is_distant = !!body.is_distant;
         ctx.state.lesson.is_control = !!body.is_control;
 
-        if (body.topic) {
-            ctx.state.lesson.topic = body.topic.trim();
-        }
-        if (body.task) {
-            ctx.state.lesson.task = (body.task).trim();
-        }
+
+        ctx.state.lesson.topic = (body.topic || '').trim();
+        ctx.state.lesson.task = (body.task || '').trim();
+
 
         if (!Object.keys(ctx.state.errors).length) {
             ctx.state.lesson.save();
