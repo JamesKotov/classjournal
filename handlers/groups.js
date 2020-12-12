@@ -8,5 +8,7 @@ module.exports = async (ctx) => {
 
     ctx.state.title = "Группы";
 
+    ctx.state.activeMenu = 'groups';
+
     return ctx.render(getTemplate(__filename), {})
 };

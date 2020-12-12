@@ -1,14 +1,22 @@
 {
+  "users": {
+    "path": "/users",
+    "name": "Пользователи",
+    "roles": ["admin"]
+  },
   "groups": {
     "path": "/groups",
-    "name": "Группы"
+    "name": "Группы",
+    "roles": ["admin", "teacher"]
   },
   "students": {
     "path": "/students",
-    "name": "Ученики"
+    "name": "Ученики",
+    "roles": ["admin", "teacher"]
   },
   "logout": {
     "path": "/logout",
-    "name": "Выход"
+    "name": "Выход",
+    "roles": ["admin", "teacher"]
   }
 }

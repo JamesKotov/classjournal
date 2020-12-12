@@ -1,6 +1,6 @@
 {
   "name": "classjournal",
-  "version": "1.0.0",
+  "version": "1.0.26",
   "description": "Class journal app",
   "main": "index.js",
   "scripts": {
@@ -19,8 +19,8 @@
   "homepage": "https://github.com/JamesKotov/classjournal#readme",
   "dependencies": {
     "csso": "^4.1.0",
+    "isemail": "^3.2.0",
     "koa": "^2.13.0",
-    "koa-async-validator": "^0.4.1",
     "koa-bodyparser": "^4.3.0",
     "koa-cache-control": "^2.0.0",
     "koa-compress": "^5.0.1",

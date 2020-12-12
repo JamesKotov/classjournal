@@ -1,0 +1,10 @@
+<ul>
+    <% users.forEach( function(user) { %>
+    <li>
+        <%= user.surname %> <%= user.name %> <%= user.patronimic %> (<%= user.role %>)
+    </li>
+    <% }); %>
+</ul>
+<div class="m-4 text-center">
+    <a href="<%= makeUrl(['users', 'add']) %>" class="btn btn-success">Добавить пользователя</a>
+</div>

@@ -13,7 +13,6 @@ const minifier = require('koa-html-minifier')
 const bodyParser = require('koa-bodyparser')
 const {KoaReqLogger} = require('koa-req-logger')
 const cacheControl = require('koa-cache-control')
-const koaValidator = require('koa-async-validator')
 const LocalStrategy = require('passport-local').Strategy
 
 
@@ -148,7 +147,6 @@ app
     })
     .use(session({}, app))
     .use(bodyParser())
-    .use(koaValidator())
     .use(passport.initialize())
     .use(passport.session())
     .use(async (ctx, next) => {

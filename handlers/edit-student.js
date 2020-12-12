@@ -115,5 +115,7 @@ module.exports = async (ctx) => {
         {name: "Ученики", path: makeUrl(['students'])},
     ];
 
+    ctx.state.activeMenu = current_group ? 'groups' : 'students';
+
     return ctx.render(getTemplate(__filename), {})
 };

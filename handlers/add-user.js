@@ -1,27 +1,80 @@
 'use strict';
-const crypto = require('crypto');
+const crypto = require('crypto')
+const IsEmail = require('isemail')
 
-const config = require('../config/config');
+const {getTemplate} = require('../utils/get-template')
+const {makeUrl} = require('../utils/make-url')
+const config = require('../config/config')
 const {Users} = require('../models')
 
 
-module.exports = async (ctx, next) => {
+module.exports = async (ctx) => {
 
-    ctx.checkBody('name', 'First name can\'t be empty').notEmpty()
-    ctx.checkBody('surname', 'Last name can\'t be empty.').notEmpty()
-    ctx.checkBody('email', 'The email you entered is invalid, please try again.').isEmail()
-    ctx.checkBody('email', 'Email address must be between 4-100 characters long, please try again.').len(4, 100)
-    ctx.checkBody('password', 'Password must be between 8-100 characters long.').len(8, 100)
-    const errors = await ctx.validationErrors()
-    if (errors) {
-        ctx.body = `There have been validation errors: ${errors}`
-    } else {
-        ctx.request.body.password = crypto.scryptSync(ctx.request.body.password, config.hashSecret, 64).toString('hex');
-        try {
-            ctx.body = await Users.create(ctx.request.body)
-        } catch (error) {
-            ctx.body = error
+    ctx.state.errors = {};
+    ctx.state.new_user = {};
+
+    if (ctx.method === 'POST') {
+
+        if (!ctx.request.body.name) {
+            ctx.state.errors.name = 'Не задано имя'
+        } else {
+            ctx.state.new_user.name = ctx.request.body.name
+        }
+
+        if (!ctx.request.body.surname) {
+            ctx.state.errors.surname = 'Не задана фамилия'
+        } else {
+            ctx.state.new_user.surname = ctx.request.body.surname
+        }
+
+        if (ctx.request.body.patronimic) {
+            ctx.state.new_user.patronimic = ctx.request.body.patronimic
+        }
+
+        if (!(ctx.request.body.gender === 'male' || ctx.request.body.gender === 'female')) {
+            ctx.state.errors.gender = 'Не задан пол'
+        } else {
+            ctx.state.new_user.gender = ctx.request.body.gender
+        }
+
+        if (!IsEmail.validate(ctx.request.body.email)) {
+            ctx.state.errors.email = 'Не задана электронная почта'
+        } else {
+            ctx.state.new_user.email = ctx.request.body.email
+        }
+
+        const password = ctx.request.body.password || ''
+        if (password.length < 8) {
+            ctx.state.errors.password = 'Пароль слишком короткий'
+        } else {
+
+            if (password !== ctx.request.body.password2) {
+                ctx.state.errors.password2 = 'Пароли не совпадают'
+            } else {
+                ctx.state.new_user.password = crypto.scryptSync(password, config.hashSecret, 64).toString('hex')
+            }
+        }
+
+        if (!Object.keys(ctx.state.errors).length) {
+            try {
+                ctx.state.new_user.role = 'teacher';
+                await Users.create(ctx.state.new_user)
+
+                return ctx.redirect('/users');
+            } catch (error) {
+                ctx.log.error(error, 'failed to add user')
+                ctx.state.errors.fail = error
+            }
         }
     }
-    await next()
+
+    ctx.state.activeMenu = 'users';
+
+    ctx.state.title = 'Добавление пользователя';
+
+    ctx.state.breadcrumbs = [
+        {name: "Пользователи", path: makeUrl(['users'])},
+    ];
+
+    return ctx.render(getTemplate(__filename), {});
 };

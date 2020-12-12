@@ -61,5 +61,7 @@ module.exports = async (ctx) => {
         {name: group.name, path: makeUrl(['groups', group.id])},
     ];
 
+    ctx.state.activeMenu = 'groups';
+
     return ctx.render(getTemplate(__filename), {})
 };

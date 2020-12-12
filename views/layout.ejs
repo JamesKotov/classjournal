@@ -16,7 +16,7 @@
         <a class="navbar-brand" href="/" tabindex="0">
             <img alt="ДМШ №37" class="mr-2" width="47" height="62" src="/logo.png?v=<%= lastModified.logo %>"/>
         </a>
-        <div class="text-white small">
+        <div class="<%= (user && user.role === 'admin') ? 'text-danger' : 'text-white'%> small">
             <% if(user) { %>
                 <%= user.surname %>
                 <br/>
@@ -33,13 +33,15 @@
             </button>
             <div class="collapse navbar-collapse text-right" id="menu">
                 <ul class="nav navbar-nav ml-auto">
-                    <% Object.keys(menu).forEach( function(itemId) { %>
+                    <% Object.keys(menu).forEach( function(itemId) {
+                        let menuItem = menu[itemId];
+                        if(user && menuItem.roles.indexOf(user.role) >= 0) { %>
                         <li class="nav-item <%= itemId === activeMenu ? 'active' : '' %> ">
-                            <a href="<%= menu[itemId].path %>" class="nav-link">
-                                <%= menu[itemId].name %>
+                            <a href="<%= menuItem.path %>" class="nav-link">
+                                <%= menuItem.name %>
                             </a>
                         </li>
-                    <% }); %>
+                    <% }}); %>
                 </ul>
             </div>
         <% } %>

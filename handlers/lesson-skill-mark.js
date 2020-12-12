@@ -110,6 +110,8 @@ module.exports = async (ctx) => {
         'Д': 'Дистанционно',
     }
 
+    ctx.state.activeMenu = 'groups';
+
     return ctx.render(getTemplate(__filename), {})
 };
 

@@ -19,5 +19,7 @@ module.exports = async (ctx) => {
 
     ctx.state.title = "Ученики";
 
+    ctx.state.activeMenu = 'students';
+
     return ctx.render(getTemplate(__filename), {})
 };

@@ -50,7 +50,7 @@ async function getCss() {
     const uniqTags = [...new Set(tags.flat())].sort();
 
     const uniqClasses = [...new Set(classes.flat())].map(c => c.replace('"', ''));
-    uniqClasses.push('active', 'border-primary', 'text-primary', 'is-invalid', 'invalid-feedback'); // hardcode here!
+    uniqClasses.push('active', 'border-primary', 'text-primary', 'is-invalid', 'invalid-feedback', 'text-white', 'text-danger'); // hardcode here!
     uniqClasses.sort()
 
     const options = {

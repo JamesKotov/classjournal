@@ -11,6 +11,20 @@ const authenticated = () => {
     }
 }
 
+const isAdmin = () => {
+    return (ctx, next) => {
+        if (!ctx.isAuthenticated()) {
+            return ctx.redirect('/login')
+        }
+
+        if (ctx.state.user.role !== 'admin') {
+            return ctx.redirect('/')
+        }
+
+        return next();
+    }
+}
+
 const router = new Router()
 
 router
@@ -42,7 +56,9 @@ router
         return ctx.redirect('/')
     })
 
-    .post('/users/add', authenticated(), require('../handlers/add-user'))
+    .get('/users', isAdmin(), require('../handlers/users'))
+    .get('/users/add', isAdmin(), require('../handlers/add-user'))
+    .post('/users/add', isAdmin(), require('../handlers/add-user'))
 
     .get('/groups', authenticated(), require('../handlers/groups'))
     .get('/groups/add_group', authenticated(), require('../handlers/edit-group'))
