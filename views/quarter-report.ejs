@@ -44,7 +44,7 @@
                     lesson.used_skills.forEach( function(item) {
                         const skills = getMarksForSkill(item.skill_id, absence_skill_id);
                     %>
-                    <td class="align-middle text-center">
+                    <td class="align-middle text-center <%= lesson.is_control ? 'font-weight-bold' : ''%>">
                         <% skills.forEach( function(mark) { %>
                             <% if (isCurrentMark(lesson.Marks, lesson.id, student.id, item.skill_id, mark)) { %>
                                 <a href="<%= makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id], [lesson.id, student.id, item.skill_id]) %>">
