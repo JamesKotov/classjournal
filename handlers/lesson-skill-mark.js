@@ -20,7 +20,7 @@ module.exports = async (ctx) => {
     });
 
     if (!groups.length) {
-        return ctx.render('404', {})
+        return ctx.throw(404)
     }
 
     const group = groups[0]
@@ -33,7 +33,7 @@ module.exports = async (ctx) => {
     });
 
     if (!lessons.length) {
-        return ctx.render('404', {})
+        return ctx.throw(404)
     }
 
     const lesson = lessons[0]
@@ -51,7 +51,7 @@ module.exports = async (ctx) => {
     })
 
     if (!ctx.state.skillsets.length) {
-        return ctx.render('404', {})
+        return ctx.throw(404)
     }
 
     ctx.state.students = await group.getStudents({
@@ -112,7 +112,7 @@ module.exports = async (ctx) => {
 
     ctx.state.activeMenu = 'groups';
 
-    return ctx.render(getTemplate(__filename), {})
+    return ctx.render(getTemplate(__filename))
 };
 
 function getMarkKey(lesson_id, student_id, skill_id) {

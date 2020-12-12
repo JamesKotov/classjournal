@@ -76,5 +76,5 @@ module.exports = async (ctx) => {
         {name: "Пользователи", path: makeUrl(['users'])},
     ];
 
-    return ctx.render(getTemplate(__filename), {});
+    return ctx.render(getTemplate(__filename));
 };

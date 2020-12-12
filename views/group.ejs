@@ -2,7 +2,6 @@
     <a href="<%=makeUrl(['groups', group.id, 'edit'])%>"
        class="btn btn-light border-dark">Редактировать группу</a>
 </p>
-
 <ul id="menuTabs" class="nav nav-tabs">
     <li class="nav-item" id="lessons">
         <a class="nav-link active" href="#">Уроки</a>
@@ -55,26 +54,53 @@
     </div>
     <div class="tab-pane" id="content_students">
         <div class="my-4 mx-3">
-
-            <% students.forEach( function(student) { %>
-                <p>
-                    <a href="<%= makeUrl(['groups', group.id, 'students', student.id]) %>">
-                        <%= student.surname %>
-                        <%= student.name %>
-                    </a>
-                </p>
-            <% }); %>
-
+            <ol>
+                <% students.forEach( function(student) { %>
+                    <li>
+                        <p>
+                            <a href="<%= makeUrl(['groups', group.id, 'students', student.id]) %>">
+                                <%= student.surname %>
+                                <%= student.name %>
+                            </a>
+                        </p>
+                    </li>
+                <% }); %>
+            </ol>
             <div class="m-4 text-center">
                 <a href="<%= makeUrl(['groups', group.id, 'add_student']) %>"
                    class="btn btn-success">Добавить ученика</a>
             </div>
         </div>
-
     </div>
     <div class="tab-pane" id="content_reports">
         <div class="my-4 mx-3">
-            Отчетов пока нет :)
+            <ul>
+                <% quarters.forEach( function(quarter) {
+                    let is_current_quarter = current_quarter_id && quarter.id === current_quarter_id
+                %>
+                <li>
+                    <p class="<%= is_current_quarter ? 'font-weight-bold' : '' %>">
+                        <%= quarter.name %>
+                    </p>
+                    <ul>
+                        <% subjects.forEach( function(subject) { %>
+                        <li>
+                            <p class="<%= is_current_quarter ? 'font-weight-bold' : '' %>">
+                                <% if(current_quarter_id && quarter.id <= current_quarter_id) { %>
+                                    <a href="<%= makeUrl(['groups', group.id, 'reports', 'quarter', quarter.id, 'subject', subject.id]) %>">
+                                        <%= subject.name %>
+                                    </a>
+                                <% } else { %>
+                                    <%= subject.name %>
+                                <% } %>
+                            </p>
+                        </li>
+                        <% }); %>
+                    </ul>
+
+                </li>
+                <% }); %>
+            </ul>
         </div>
     </div>
 </div>

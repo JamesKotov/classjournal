@@ -15,7 +15,7 @@ module.exports = async (ctx) => {
     let current_group = group_id ? ctx.state.groups.find(g => g.id === group_id) : undefined;
 
     if (group_id && !current_group) {
-        return ctx.render('404', {})
+        return ctx.throw(404)
     }
 
     ctx.state.group_id = 0
@@ -34,7 +34,7 @@ module.exports = async (ctx) => {
         })
 
         if (!ctx.state.student) {
-            return ctx.render('404', {})
+            return ctx.throw(404)
         }
 
         ctx.state.group_id = ctx.state.student.Groups[0].id;
@@ -117,5 +117,5 @@ module.exports = async (ctx) => {
 
     ctx.state.activeMenu = current_group ? 'groups' : 'students';
 
-    return ctx.render(getTemplate(__filename), {})
+    return ctx.render(getTemplate(__filename))
 };

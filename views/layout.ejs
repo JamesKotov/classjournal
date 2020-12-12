@@ -66,7 +66,7 @@
             <% } %>
 
             <% if(title) { %>
-                <h1 class="mb-4"><%- title %></h1>
+                <h1 class="mb-4 <%= !!failure ? 'text-danger' : ''%>"><%- title %></h1>
             <% } %>
             <%- body %>
         </div>

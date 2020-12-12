@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <meta name="robots" content="noindex, nofollow"/>
+    <title></title>
+    <style type="text/css" media="print">
+        <%- styles %>
+        @media print {
+            @page {
+                size: a4 !important;
+            }
+
+            html {
+                font-family: "Times New Roman", Times, serif !important;
+                font-size: 10pt !important;
+                font-weight: 400;
+                line-height: 1.15;
+                -webkit-text-size-adjust: 100%;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                margin: 0;
+                padding: 0 !important;
+                /*zoom:0.8;
+                width: 19cm;
+                max-width: 19cm;*/
+            }
+
+            body {
+                font-family: "Times New Roman", Times, serif !important;
+                font-size: 10pt !important;
+                font-weight: 400;
+                line-height: 1.15;
+                color: #000;
+                text-align: left;
+                background-color: #fff;
+                height: 100vh;
+                margin: 0;
+                padding: 0 !important;
+                min-width: 768px;
+                /*width: 19cm;
+                max-width: 19cm;*/
+            }
+
+            .table {
+                border: 1pt solid black !important;
+                border-spacing: 0 0 !important;
+            }
+
+            .table.table-bordered {
+                border: 1pt solid black !important;
+            }
+
+            .table-bordered th,
+            .table-bordered td {
+                border: 1pt solid black !important;
+                font-weight: 400 !important;
+            }
+
+            .btn {
+                display: none !important;
+            }
+
+            a {
+                color: black !important;
+                text-decoration: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<% if(title) { %>
+    <h1 class="mb-4"><%- title %></h1>
+<% } %>
+<%- body %>
+<div id="pageFooter"></div>
+</body>
+</html>

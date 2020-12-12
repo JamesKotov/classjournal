@@ -2,17 +2,14 @@
 
 const {getTemplate} = require('../utils/get-template');
 const {Quarters, Subjects, Lessons} = require('../models');
+const {getNowTime} = require('../utils/now');
 const {makeUrl} = require('../utils/make-url');
 
 module.exports = async (ctx) => {
     const group_id = ctx.params.group_id;
     const lesson_id = ctx.params.lesson_id;
 
-    const now = new Date();
-    now.setUTCHours(now.getHours());
-    now.setUTCMinutes(now.getMinutes());
-    now.setSeconds(null);
-    now.setMilliseconds(null);
+    const now = getNowTime();
 
     const groups = await ctx.state.user.getGroups({
         where: {
@@ -21,7 +18,7 @@ module.exports = async (ctx) => {
     });
 
     if (!groups.length) {
-        return ctx.render('404', {})
+        return ctx.throw(404)
     }
 
     const group = groups[0]
@@ -39,7 +36,7 @@ module.exports = async (ctx) => {
         });
 
         if (!lessons.length) {
-            return ctx.render('404', {})
+            return ctx.throw(404)
         }
 
         ctx.state.lesson = lessons[0];
@@ -61,7 +58,7 @@ module.exports = async (ctx) => {
 
         ctx.state.lesson = Lessons.build();
         ctx.state.lesson.group_id = group.id;
-        ctx.state.lesson.quarter_id = current_quarter.id;
+        ctx.state.lesson.quarter_id = current_quarter ? current_quarter.id : 0;
         ctx.state.lesson.datetime = now.toISOString().slice(0, -1);
     }
 
@@ -138,5 +135,5 @@ module.exports = async (ctx) => {
 
     ctx.state.activeMenu = 'groups';
 
-    return ctx.render(getTemplate(__filename), {})
+    return ctx.render(getTemplate(__filename))
 };

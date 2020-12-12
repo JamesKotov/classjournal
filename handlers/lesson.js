@@ -16,7 +16,7 @@ module.exports = async (ctx) => {
     });
 
     if (!groups.length) {
-        return ctx.render('404', {})
+        return ctx.throw(404)
     }
 
     const group = groups[0]
@@ -29,7 +29,7 @@ module.exports = async (ctx) => {
     });
 
     if (!lessons.length) {
-        return ctx.render('404', {})
+        return ctx.throw(404)
     }
 
     const lesson = lessons[0]
@@ -63,5 +63,5 @@ module.exports = async (ctx) => {
 
     ctx.state.activeMenu = 'groups';
 
-    return ctx.render(getTemplate(__filename), {})
+    return ctx.render(getTemplate(__filename))
 };

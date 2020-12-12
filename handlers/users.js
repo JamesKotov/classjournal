@@ -11,5 +11,5 @@ module.exports = async (ctx) => {
 
     ctx.state.activeMenu = 'users';
 
-    return ctx.render(getTemplate(__filename), {})
+    return ctx.render(getTemplate(__filename))
 };

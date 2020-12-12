@@ -77,6 +77,8 @@ router
     .post('/groups/:group_id/lessons/:lesson_id/edit', authenticated(), require('../handlers/edit-lesson'))
     .get('/groups/:group_id/lessons/:lesson_id/skill/:skill_id', authenticated(), require('../handlers/lesson-skill-mark'))
     .post('/groups/:group_id/lessons/:lesson_id/skill/:skill_id', authenticated(), require('../handlers/lesson-skill-mark'))
+    .get('/groups/:group_id/reports/quarter/:quarter_id/subject/:subject_id/download/:file_format', authenticated(), require('../handlers/quarter-report'))
+    .get('/groups/:group_id/reports/quarter/:quarter_id/subject/:subject_id', authenticated(), require('../handlers/quarter-report'))
 
     .get('/students', authenticated(), require('../handlers/students'))
     .get('/students/add_student', authenticated(), require('../handlers/edit-student'))

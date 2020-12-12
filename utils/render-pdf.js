@@ -5,15 +5,15 @@ const pdf = require('html-pdf');
 async function renderPdf(html) {
     const pdfOptions = {
         format: 'A4',
-        orientation: "portrait",
-        border: '18mm',
+        orientation: "landscape",
+        border: '12mm',
         type: "pdf",
         dpi: 200,
         quality: 80,
         zoomFactor: "1",
         paginationOffset: 1,
         footer: {
-            height: '10mm',
+            height: '8mm',
             contents: {
                 default: '<div style="text-align: center"><br/><small>страница {{page}} из {{pages}}</small></div>',
             }

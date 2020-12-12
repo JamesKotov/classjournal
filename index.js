@@ -26,9 +26,14 @@ const {makeUrl} = require('./utils/make-url')
 const {getMarksForSkill, isCurrentMark} = require('./utils/marks')
 const {formatDateShort, formatTime} = require('./utils/format-date')
 
+const errorTitles = {
+    400: 'Некорректный запрос',
+    404: 'Не найдено',
+    500: 'Ошибка',
+}
+
 
 logger.info('~~~ Starting ClassJournal APP ~~~');
-
 
 const koaLogger = new KoaReqLogger({
     pinoInstance: logger,
@@ -127,6 +132,7 @@ app
         ctx.set('X-Version', version);
         try {
             ctx.state.title = 'Журнал';
+            ctx.state.failure = false;
             ctx.state.activeMenu = '';
             ctx.state.user = null;
             ctx.state.breadcrumbs = [];
@@ -141,8 +147,9 @@ app
 
             await next()
         } catch (err) {
-            ctx.state.title = '';
             ctx.status = err.status || 500;
+            ctx.state.title = errorTitles[ctx.status] || 'Ошибка';
+            ctx.state.failure = true;
             ctx.log.error(err)
             return ctx.render(ctx.status);
         }
@@ -156,8 +163,11 @@ app
         ctx.state.menu = ctx.isAuthenticated() ? menu : {};
         return next();
     })
-    .use(router.routes())
     .use(router.allowedMethods())
+    .use(router.routes())
+    .use(function*() {
+        this.throw(404)
+    });
 
 db.sequelize.sync().then(() => {
     const port = config.serverPort;

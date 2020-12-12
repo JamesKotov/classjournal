@@ -1,8 +1,9 @@
 'use strict';
 
 const {getTemplate} = require('../utils/get-template');
-const {makeUrl} = require('../utils/make-url');
-const {Subjects} = require('../models')
+const {Subjects, Quarters} = require('../models')
+const {makeUrl} = require('../utils/make-url')
+const {getNowTime} = require('../utils/now')
 
 module.exports = async (ctx) => {
 
@@ -15,16 +16,28 @@ module.exports = async (ctx) => {
     });
 
     if (!groups.length) {
-        return ctx.render('404', {})
+        return ctx.throw(404)
     }
 
     const group = groups[0]
-
     ctx.state.group = group;
-    ctx.state.lessons = (await group.getLessons({
+
+    const allLessons = await group.getLessons({
         include: Subjects,
         order: ["date", "time"]
-    })).reduce(function (accumulator, currentLesson) {
+    })
+
+    const subjs = {};
+    ctx.state.subjects = [];
+    allLessons.forEach(l => { subjs[l.Subject.id] = l.Subject.name});
+    Object.keys(subjs).forEach(k => {
+        ctx.state.subjects.push({
+            id: k,
+            name: subjs[k]
+        })
+    })
+
+    ctx.state.lessons = allLessons.reduce(function (accumulator, currentLesson) {
         const date = currentLesson.date;
         accumulator[date] = accumulator[date] || [];
         accumulator[date].push(currentLesson);
@@ -35,6 +48,16 @@ module.exports = async (ctx) => {
         order: ["surname", "name"]
     });
 
+    ctx.state.quarters = await Quarters.findAll({
+        order: ["id"]
+    })
+
+    const now = getNowTime();
+    const nowTs = now.getTime();
+    const current_quarter = ctx.state.quarters.find(q => q.begin.getTime() <= nowTs && q.end.getTime() >= nowTs);
+
+    ctx.state.current_quarter_id = current_quarter ? current_quarter.id : 0;
+
     ctx.state.title = group.name;
 
     ctx.state.breadcrumbs = [
@@ -43,5 +66,5 @@ module.exports = async (ctx) => {
 
     ctx.state.activeMenu = 'groups';
 
-    return ctx.render(getTemplate(__filename), {})
+    return ctx.render(getTemplate(__filename))
 };
