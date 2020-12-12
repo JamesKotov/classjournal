@@ -134,6 +134,7 @@ module.exports = async (ctx) => {
         const rendered = await ctx.render(getTemplate(__filename), {
             layout: 'pdf',
             styles: styles,
+            styles_zoom: config.pdf_zoom_factor,
             writeResp: false,
         })
 

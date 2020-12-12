@@ -6,8 +6,12 @@ const getEnvVariable = envUtils.getEnvVariable;
 const ABSENCE_SKILL_ID = 1;
 const MAX_SKILLS_PER_PAGE = 13;
 
+const env = getEnvVariable('NODE_ENV', 'dev');
+
+const isProduction = env === 'production';
+
 const config = {
-    env: getEnvVariable('NODE_ENV', 'dev'),
+    env: env,
 
     logLevel: getEnvVariable('LOG_LEVEL', 'debug'),
 
@@ -20,6 +24,8 @@ const config = {
     absence_skill_id: ABSENCE_SKILL_ID,
 
     max_skills_per_page: MAX_SKILLS_PER_PAGE,
+
+    pdf_zoom_factor: isProduction ? 0.75 : 1,
 
 };
 
