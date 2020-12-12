@@ -1,10 +1,12 @@
 <ul>
     <% groups.forEach( function(group) { %>
-        <li>
-            <a href="<%=makeUrl(['groups', group.id])%>">
+    <li>
+        <p>
+            <a href="<%= makeUrl(['groups', group.id]) %>">
                 <%= group.name %>
             </a>
-        </li>
+        </p>
+    </li>
     <% }); %>
 </ul>
 <div class="m-4 text-center">
