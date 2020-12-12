@@ -15,14 +15,14 @@ const {KoaReqLogger} = require('koa-req-logger')
 const cacheControl = require('koa-cache-control')
 const LocalStrategy = require('passport-local').Strategy
 
-
 const db = require('./models')
 const router = require('./router')
 const {Users} = require('./models')
 const logger = require('./utils/logger')
 const menu = require('./menu/menu.json')
 const config = require('./config/config')
-const {makeUrl} = require('./utils/make-url');
+const {version} = require('./package.json')
+const {makeUrl} = require('./utils/make-url')
 const {getMarksForSkill, isCurrentMark} = require('./utils/marks')
 const {formatDateShort, formatTime} = require('./utils/format-date')
 
@@ -98,6 +98,7 @@ render(app, {
 
 app
     .use(koaLogger.getMiddleware())
+
     .use(compress({
         threshold: 2048,
         gzip: {
@@ -123,6 +124,7 @@ app
         noCache: true
     }))
     .use(async (ctx, next) => {
+        ctx.set('X-Version', version);
         try {
             ctx.state.title = 'Журнал';
             ctx.state.activeMenu = '';
