@@ -9,6 +9,7 @@ const {getTemplate} = require('../utils/get-template');
 const renderPdf = require('../utils/render-pdf')
 const {makeUrl} = require('../utils/make-url')
 const {getNowTime} = require('../utils/now')
+const config = require('../config/config')
 
 const filepath = path.join(__dirname, '../static/bootstrap.css');
 const styles = fs.readFileSync(filepath);
@@ -31,8 +32,12 @@ module.exports = async (ctx) => {
     const subject_id = ctx.params.subject_id;
     const file_format = ctx.params.file_format || '';
 
-    if (file_format && file_format !== 'pdf') {
-        return ctx.throw(400)
+    let isPdf = false;
+    if (file_format) {
+        if (file_format !== 'pdf') {
+            return ctx.throw(400)
+        }
+        isPdf = true;
     }
 
     const groups = await ctx.state.user.getGroups({
@@ -83,7 +88,7 @@ module.exports = async (ctx) => {
         order: ["skill_order", "skill_id"]
     })
 
-    ctx.state.lessons = await group.getLessons({
+    const lessons = await group.getLessons({
         where: {
             'quarter_id': quarter_id,
             'subject_id': subject_id,
@@ -92,14 +97,25 @@ module.exports = async (ctx) => {
         order: ["date", "time"]
     })
 
-    if (!ctx.state.lessons.length) {
+    if (!lessons.length) {
         return ctx.throw(400)
     }
 
-    ctx.state.lessons.forEach(l => {
+    let lessonsParts = [];
+    const max_skills_per_page = config.max_skills_per_page;
+    let count = 0;
+
+    lessons.forEach(l => {
         const used_skills = [...new Set(l.Marks.map(m => m.skill_id))];
-        l.used_skills = skillsets.filter(s => used_skills.indexOf(s.skill_id) >= 0)
+        l.used_skills = skillsets.filter(s => used_skills.indexOf(s.skill_id) >= 0);
+        count += (l.used_skills.length || 1);
+        const i = isPdf ?  Math.ceil(count / max_skills_per_page) - 1 : 0;
+        lessonsParts[i] = lessonsParts[i] || [];
+        lessonsParts[i].push(l);
     })
+
+    ctx.state.lessonsParts = lessonsParts;
+
 
     ctx.state.students = await group.getStudents({
         order: ["surname", "name"]
@@ -114,7 +130,7 @@ module.exports = async (ctx) => {
 
     ctx.state.activeMenu = 'groups';
 
-    if (file_format && file_format === 'pdf') {
+    if (isPdf) {
         const rendered = await ctx.render(getTemplate(__filename), {
             layout: 'pdf',
             styles: styles,
@@ -123,7 +139,7 @@ module.exports = async (ctx) => {
 
         const buffer = await renderPdf(rendered);
 
-        const fname = `report.pdf`;
+        const fname = `${subject.name} - ${quarter_id} четверть - ${group.name}.pdf`;
 
         ctx.body = buffer;
         ctx.attachment(fname);

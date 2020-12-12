@@ -4,6 +4,7 @@ const envUtils = require('../utils/env');
 const getEnvVariable = envUtils.getEnvVariable;
 
 const ABSENCE_SKILL_ID = 1;
+const MAX_SKILLS_PER_PAGE = 13;
 
 const config = {
     env: getEnvVariable('NODE_ENV', 'dev'),
@@ -17,6 +18,8 @@ const config = {
     hashSecret: getEnvVariable('HASH_SECRET', ''),
 
     absence_skill_id: ABSENCE_SKILL_ID,
+
+    max_skills_per_page: MAX_SKILLS_PER_PAGE,
 
 };
 

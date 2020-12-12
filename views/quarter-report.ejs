@@ -1,59 +1,89 @@
 <p class="text-center">
-    <a href="<%= makeUrl(['groups', group.id, 'reports', 'quarter', quarter.id, 'subject', subject.id, 'download', 'pdf'])%>"
+    <a href="<%= makeUrl(['groups', group.id, 'reports', 'quarter', quarter.id, 'subject', subject.id, 'download', 'pdf']) %>"
        class="btn btn-primary">Скачать pdf</a>
 </p>
 
-<table class="table table-striped table-bordered table-hover table-sm">
-    <thead>
-    <tr>
-        <th rowspan="2" scope="col" class="align-middle">Ученики</th>
-        <% lessons.forEach( function(lesson) { %>
-            <th colspan="<%= lesson.used_skills.length || 1 %>" rowspan="<%= lesson.used_skills.length ? 1 : 2 %>"
-                class="align-top text-center">
-                <a href="<%= makeUrl(['groups', group.id, 'lessons', lesson.id]) %>">
-                    <%= formatDateShort(new Date(lesson.date)) %>
-                </a>
-            </th>
-        <% }); %>
-    </tr>
-    <tr>
-        <% lessons.forEach( function(lesson) {
-        lesson.used_skills.forEach( function(skill) { %>
-            <th class="align-top text-center skill-title">
-                <%= skill.Skill.name %>
-            </th>
-        <% })
-        }); %>
-    </tr>
-    </thead>
-    <tbody>
-    <% students.forEach( function(student) { %>
+<% lessonsParts.forEach( function(lessons) { %>
+    <table class="table table-striped table-bordered table-hover table-sm">
+        <thead>
         <tr>
-            <th scope="row" class="align-middle">
-                <%= student.surname %>
-                <%= student.name %>
-            </th>
+            <th rowspan="2" scope="col" class="align-middle">Ученики</th>
+            <% lessons.forEach( function(lesson) { %>
+                <th colspan="<%= lesson.used_skills.length || 1 %>" rowspan="<%= lesson.used_skills.length ? 1 : 2 %>"
+                    class="align-top text-center">
+                    <a href="<%= makeUrl(['groups', group.id, 'lessons', lesson.id]) %>">
+                        <%= formatDateShort(new Date(lesson.date)) %>
+                    </a>
+                </th>
+            <% }); %>
+        </tr>
+        <tr>
             <% lessons.forEach( function(lesson) {
-            if (!lesson.used_skills.length) { %>
-                <td>&nbsp;</td>
-            <%
-            } else {
-            lesson.used_skills.forEach( function(item) {
-                const skills = getMarksForSkill(item.skill_id, absence_skill_id);
-            %>
-            <td class="align-middle text-center">
-                <% skills.forEach( function(mark) { %>
-                    <% if (isCurrentMark(lesson.Marks, lesson.id, student.id, item.skill_id, mark)) { %>
-                        <a href="<%= makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id], [lesson.id, student.id, item.skill_id]) %>">
-                            <%= mark %>
-                        </a>
-                    <% } %>
-                <% }) %>
-            </td>
+            lesson.used_skills.forEach( function(skill) { %>
+                <th class="align-top text-center skill-title">
+                    <%= skill.Skill.name %>
+                </th>
             <% })
-            }
             }); %>
         </tr>
-    <% }); %>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        <% students.forEach( function(student) { %>
+            <tr>
+                <th scope="row" class="align-middle">
+                    <%= student.surname %>
+                    <%= student.name %>
+                </th>
+                <% lessons.forEach( function(lesson) {
+                if (!lesson.used_skills.length) { %>
+                    <td>&nbsp;</td>
+                <%
+                } else {
+                lesson.used_skills.forEach( function(item) {
+                    const skills = getMarksForSkill(item.skill_id, absence_skill_id);
+                %>
+                <td class="align-middle text-center">
+                    <% skills.forEach( function(mark) { %>
+                        <% if (isCurrentMark(lesson.Marks, lesson.id, student.id, item.skill_id, mark)) { %>
+                            <a href="<%= makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id], [lesson.id, student.id, item.skill_id]) %>">
+                                <%= mark %>
+                            </a>
+                        <% } %>
+                    <% }) %>
+                </td>
+                <% })
+                }
+                }); %>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+    <hr class="footnote"/><br/>
+    <div class="my-4">
+        <dl class="row">
+            <% lessons.forEach( function(lesson) {
+            let remark = ''
+                const flags = []
+                if (lesson.is_distant) {
+                    flags.push('дистанционный')
+                }
+                if (lesson.is_control) {
+                    flags.push('контрольный')
+                }
+                if (flags.length) {
+                    remark = '(' + flags.join(', ') + ')';
+                }
+            %>
+                <dt class="col-sm-12">
+                    <p><%= formatDateShort(new Date(lesson.date)) %> <%= remark %></p>
+                </dt>
+                <dd class="col-sm-12">
+                    <p>Тема: <%- lesson.topic || '&mdash;' %></p>
+                    <p>Задание: <%- lesson.task || '&mdash;' %></p>
+                </dd>
+            <% }); %>
+        </dl>
+
+    </div>
+    <div class="page-break"></div>
+<% }); %>

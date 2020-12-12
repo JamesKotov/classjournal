@@ -9,7 +9,7 @@
         <%- styles %>
         @media print {
             @page {
-                size: a4 !important;
+                size: a4 landscape !important;
             }
 
             html {
@@ -21,9 +21,10 @@
                 -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
                 margin: 0;
                 padding: 0 !important;
-                zoom:0.8;
                 /*width: 19cm;
-                max-width: 19cm;*/
+                max-width: 19cm;
+                min-width: 19cm;*/
+                zoom:0.8;
             }
 
             body {
@@ -37,9 +38,9 @@
                 height: 100vh;
                 margin: 0;
                 padding: 0 !important;
-                min-width: 768px;
                 /*width: 19cm;
-                max-width: 19cm;*/
+                max-width: 19cm;
+                min-width: 19cm;*/
             }
 
             .table {
@@ -54,7 +55,7 @@
             .table-bordered th,
             .table-bordered td {
                 border: 1pt solid black !important;
-                font-weight: 400 !important;
+                white-space: nowrap;
             }
 
             .btn {
@@ -65,6 +66,16 @@
                 color: black !important;
                 text-decoration: none !important;
             }
+
+            .page-break {
+                page-break-inside: avoid;
+                page-break-after: always;
+                page-break-before: avoid;
+                height: 0;
+                margin: 0;
+                border: none;
+            }
+
         }
     </style>
 </head>
