@@ -160,7 +160,11 @@ app
             return ctx.render(ctx.status);
         }
     })
-    .use(session({}, app))
+    .use(session({
+        maxAge: 86400000,
+        rolling: true,
+        secure: config.env === 'production',
+    }, app))
     .use(bodyParser())
     .use(passport.initialize())
     .use(passport.session())
