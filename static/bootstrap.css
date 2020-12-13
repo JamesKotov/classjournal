@@ -11082,33 +11082,3 @@ a.text-dark:hover, a.text-dark:focus {
         border-color: #dee2e6;
     }
 }
-
-/* custom addons*/
-
-@media screen {
-
-
-    .skill-title {
-        padding: 0;
-        margin: 0;
-        max-width: 105px;
-        vertical-align: top;
-        word-break: break-word;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-
-}
-
-.footnote {
-    width: 25%;
-    float: left;
-    clear-after: both;
-}
-
-.tab-border {
-    border: 1px solid;
-    border-color: transparent #dee2e6 #dee2e6;
-    border-bottom-left-radius: .25rem;
-    border-bottom-right-radius: .25rem;
-}

@@ -2,18 +2,20 @@
 
 const pdf = require('html-pdf');
 
+const config = require("../config/config");
+
 async function renderPdf(html) {
     const pdfOptions = {
         format: 'A4',
-        orientation: "landscape",
-        border: '12mm',
+        orientation: config.pdf_orientation,
+        border: config.pdf_margins + 'mm',
         type: "pdf",
         dpi: 200,
         quality: 80,
         zoomFactor: "1",
         paginationOffset: 1,
         footer: {
-            height: '8mm',
+            height: (config.pdf_margins - 4) + 'mm',
             contents: {
                 default: '<div style="text-align: center"><br/><small>страница {{page}} из {{pages}}</small></div>',
             }

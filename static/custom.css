@@ -1,0 +1,102 @@
+/* custom addons*/
+
+.footnote {
+    width: 25%;
+    float: left;
+    clear-after: both;
+}
+
+.tab-border {
+    border: 1px solid;
+    border-color: transparent #dee2e6 #dee2e6;
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
+.hyphenated {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.lesson-header {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+}
+
+
+@media print {
+
+    html {
+        font-family: "Times New Roman", Times, serif !important;
+        font-size: 10pt !important;
+        font-weight: 400;
+        line-height: 1.15;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        margin: 0;
+        padding: 0 !important;
+        width: 186mm !important;
+        min-width: 186mm !important;
+        max-width: 186mm !important;
+    }
+
+    body {
+        font-family: "Times New Roman", Times, serif !important;
+        font-size: 10pt !important;
+        font-weight: 400;
+        line-height: 1.15;
+        color: #000;
+        text-align: left;
+        background-color: #fff;
+        height: 100vh;
+        margin: 0;
+        padding: 0 !important;
+        width: 186mm !important;
+        min-width: 186mm !important;
+        max-width: 186mm !important;
+    }
+
+    .table {
+        border: 1pt solid black !important;
+        border-spacing: 0 0 !important;
+        width: auto !important;
+        max-width: 186mm !important;
+    }
+
+    .table.table-bordered {
+        border: 1pt solid black !important;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        border: 1pt solid black !important;
+        box-sizing: border-box;
+        padding: 1mm !important;
+        margin: 0;
+    }
+
+    .btn {
+        display: none !important;
+    }
+
+    a {
+        color: black !important;
+        text-decoration: none !important;
+    }
+
+    h1 {
+        width: 186mm !important;
+        min-width: 186mm !important;
+        max-width: 186mm !important;
+    }
+
+    .page-break {
+        page-break-inside: avoid;
+        page-break-after: always;
+        page-break-before: avoid;
+        height: 0;
+        margin: 0;
+        border: none;
+    }
+}

@@ -25,7 +25,7 @@
                     <%= student.name %>
                 </th>
                 <% skillsets.forEach( function(skillset) {
-                    const marks = lesson.skill_marks[skillset.skill_id] || [];
+                    const marks = getMarksForSkill(skillset.skill_id, absence_skill_id);
                     const is_absense_skill = skillset.skill_id === absence_skill_id;
                     const is_disabled = lesson.hasMark(lesson.id, student.id, absence_skill_id, getMarksForSkill(absence_skill_id, absence_skill_id)[1]);
                 %>

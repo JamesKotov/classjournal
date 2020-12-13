@@ -34,6 +34,7 @@ const errorTitles = {
 }
 
 logger.info('~~~ Starting ClassJournal APP ~~~');
+logger.info({config}, 'app config');
 
 const hyphenator = hyphenopoly.config({
     "require": ["en-us", "ru"]

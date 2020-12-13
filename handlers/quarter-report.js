@@ -1,9 +1,5 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-
-
 const {Marks, Quarters, Skills, SkillSets, Students, Subjects} = require('../models')
 const {getTemplate} = require('../utils/get-template');
 const renderPdf = require('../utils/render-pdf')
@@ -12,9 +8,6 @@ const {getNowTime} = require('../utils/now')
 const config = require('../config/config')
 
 const all_marks = Marks.rawAttributes['mark'].values;
-
-const filepath = path.join(__dirname, '../static/bootstrap.css');
-const styles = fs.readFileSync(filepath);
 
 const quarterDeclension = {
     1: 'первую',
@@ -107,25 +100,27 @@ module.exports = async (ctx) => {
         order: ["date", "time"]
     })
 
-    if (!lessons.length) {
-        return ctx.throw(400)
-    }
-
     let lessonsParts = [];
-    const max_skills_per_page = config.max_skills_per_page;
+    const pdf_max_skills_per_page = config.pdf_max_skills_per_page;
     let count = 0;
+    let i = 0;
 
     lessons.forEach(l => {
         l.initLesson(skillsets, config.absence_skill_id, all_marks)
-        count += (l.used_skills.length || 1);
-        const i = isPdf ? Math.ceil(count / max_skills_per_page) - 1 : 0;
-        lessonsParts[i] = lessonsParts[i] || [];
-        lessonsParts[i].push(l);
+        const skills_count = (l.used_skills.length || 1)
+        count += skills_count
+        if (count > pdf_max_skills_per_page) {
+            count = skills_count;
+            i++;
+        }
+        const part = isPdf ? i : 0;
+        lessonsParts[part] = lessonsParts[part] || [];
+        lessonsParts[part].push(l);
     })
 
     ctx.state.lessonsParts = lessonsParts;
 
-    ctx.state.title = `${group.name}&nbsp;&ndash; отчет за&nbsp;${getQuarterDeclension(quarter_id)} четверть по&nbsp;предмету &laquo;${subject.name}&raquo;`;
+    ctx.state.title = `${group.name}&nbsp;&ndash; журнал за&nbsp;${getQuarterDeclension(quarter_id)} четверть по&nbsp;предмету &laquo;${subject.name}&raquo;`;
 
     ctx.state.breadcrumbs = [
         {name: "Группы", path: makeUrl(['groups'])},
@@ -137,7 +132,10 @@ module.exports = async (ctx) => {
     if (isPdf) {
         const rendered = await ctx.render(getTemplate(__filename), {
             layout: 'pdf',
-            styles: styles,
+            orientation: config.pdf_orientation,
+            width: config.pdf_width,
+            cell_width: config.pdf_cell_width,
+            styles: await require('../utils/css'),
             styles_zoom: config.pdf_zoom_factor,
             writeResp: false,
         })

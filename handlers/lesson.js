@@ -1,9 +1,10 @@
 'use strict';
 
 const config = require('../config/config');
+const {getNowTime} = require('../utils/now');
 const {makeUrl} = require('../utils/make-url');
 const {getTemplate} = require('../utils/get-template');
-const {Marks, SkillSets, Skills, Students, Subjects} = require('../models');
+const {Marks, Quarters, SkillSets, Skills, Students, Subjects} = require('../models');
 
 const all_marks = Marks.rawAttributes['mark'].values;
 
@@ -57,6 +58,16 @@ module.exports = async (ctx) => {
     })
 
     lesson.initLesson(ctx.state.skillsets, config.absence_skill_id, all_marks)
+
+    ctx.state.quarters = await Quarters.findAll({
+        order: ["id"]
+    })
+
+    const now = getNowTime();
+    const nowTs = now.getTime();
+    const current_quarter = ctx.state.quarters.find(q => q.begin.getTime() <= nowTs && q.end.getTime() >= nowTs);
+
+    ctx.state.current_quarter_id = current_quarter ? current_quarter.id : 0;
 
     ctx.state.title = lesson.Subject.name;
 
