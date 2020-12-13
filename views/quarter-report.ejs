@@ -12,7 +12,7 @@
                 <% lessons.forEach( function(lesson) { %>
                     <th colspan="<%= lesson.used_skills.length || 1 %>"
                         rowspan="<%= lesson.used_skills.length ? 1 : 2 %>"
-                        class="align-top text-center">
+                        class="align-top text-center text-nowrap">
                         <a href="<%= makeUrl(['groups', group.id, 'lessons', lesson.id]) %>">
                             <%= formatDateShort(new Date(lesson.date)) %>
                         </a>
@@ -22,8 +22,8 @@
             <tr>
                 <% lessons.forEach( function(lesson) {
                 lesson.used_skills.forEach( function(skill) { %>
-                    <th class="align-top text-center skill-title">
-                        <%= skill.Skill.name %>
+                    <th class="align-top text-center hyphenated">
+                        <%= hyphenateText(skill.Skill.name) %>
                     </th>
                 <% })
                 }); %>

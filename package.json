@@ -1,6 +1,6 @@
 {
   "name": "classjournal",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "description": "Class journal app",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,7 @@
   "dependencies": {
     "csso": "^4.1.0",
     "html-pdf": "^2.2.0",
+    "hyphenopoly": "^4.9.0",
     "isemail": "^3.2.0",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",

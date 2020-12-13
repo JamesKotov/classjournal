@@ -9,6 +9,7 @@ const render = require('koa-ejs')
 const session = require('koa-session')
 const compress = require('koa-compress')
 const passport = require('koa-passport')
+const hyphenopoly = require("hyphenopoly")
 const minifier = require('koa-html-minifier')
 const bodyParser = require('koa-bodyparser')
 const {KoaReqLogger} = require('koa-req-logger')
@@ -32,8 +33,12 @@ const errorTitles = {
     500: 'Ошибка',
 }
 
-
 logger.info('~~~ Starting ClassJournal APP ~~~');
+
+const hyphenator = hyphenopoly.config({
+    "require": ["en-us", "ru"]
+});
+
 
 const koaLogger = new KoaReqLogger({
     pinoInstance: logger,
@@ -141,6 +146,7 @@ app
             ctx.state.getMarksForSkill = getMarksForSkill;
             ctx.state.makeUrl = makeUrl;
             ctx.state.encodeURIComponent = encodeURIComponent;
+            ctx.state.hyphenateText = await hyphenator.get("ru");
             ctx.state.absence_skill_id = config.absence_skill_id;
             ctx.state.lastModified = lastModified;
 
