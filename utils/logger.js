@@ -9,7 +9,7 @@ const {version} = require('../package.json');
 // logger and errors handler
 const pinoLogger = pino({
     base: {ver: version},
-    redact: ['dbDsn', 'hashSecret'],
+    redact: ['config.dbDsn', 'config.hashSecret'],
     level: config.logLevel,
     formatters: {
         level: (label) => {
