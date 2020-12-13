@@ -5,7 +5,9 @@ const {makeUrl} = require('../utils/make-url');
 const {isMarkValid} = require('../utils/marks');
 const {getTemplate} = require('../utils/get-template');
 const {formatDateShort} = require('../utils/format-date');
-const {Marks, SkillSets, Skills, Subjects} = require('../models');
+const {Marks, SkillSets, Skills, Students, Subjects} = require('../models');
+
+const all_marks = Marks.rawAttributes['mark'].values;
 
 module.exports = async (ctx) => {
 
@@ -16,7 +18,15 @@ module.exports = async (ctx) => {
     const groups = await ctx.state.user.getGroups({
         where: {
             'id': group_id
-        }
+        },
+        include: [{
+            model: Students,
+            as: 'Students',
+        }],
+        order: [
+            [Students, 'surname'],
+            [Students, 'name'],
+        ]
     });
 
     if (!groups.length) {
@@ -24,12 +34,13 @@ module.exports = async (ctx) => {
     }
 
     const group = groups[0]
+    ctx.state.group = group
 
     const lessons = await group.getLessons({
         where: {
             'id': lesson_id
         },
-        include: Subjects,
+        include: [Subjects, Marks]
     });
 
     if (!lessons.length) {
@@ -37,9 +48,8 @@ module.exports = async (ctx) => {
     }
 
     const lesson = lessons[0]
-
     ctx.state.lesson = lesson
-    ctx.state.group = group;
+
     ctx.state.skillsets = await SkillSets.findAll({
         where: {
             subject_id: lesson.subject_id,
@@ -54,13 +64,9 @@ module.exports = async (ctx) => {
         return ctx.throw(404)
     }
 
-    ctx.state.students = await group.getStudents({
-        order: ["surname", "name"]
-    });
-
     if (ctx.method === 'POST') {
         const body = ctx.request.body;
-        for (let student of ctx.state.students) {
+        for (let student of group.Students) {
             let key = getMarkKey(lesson.id, student.id, skill_id);
             if (body.hasOwnProperty(key)) {
                 let value = decodeURIComponent(body[key]);
@@ -93,7 +99,8 @@ module.exports = async (ctx) => {
         return;
     }
 
-    ctx.state.marks = await lesson.getMarks()
+    lesson.Marks = await lesson.getMarks()
+    lesson.initLesson(ctx.state.skillsets, config.absence_skill_id, all_marks)
 
     ctx.state.title = lesson.topic || ctx.state.skillsets[0].Skill.name;
 

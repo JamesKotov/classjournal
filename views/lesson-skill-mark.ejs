@@ -12,39 +12,39 @@
         <thead>
         <tr>
             <th scope="col" class="align-top">Ученики</th>
-            <% skillsets.forEach( function(item) { %>
-                <th scope="col" class="align-top text-center"><%= item.Skill.name %></th>
+            <% skillsets.forEach( function(skillset) { %>
+                <th scope="col" class="align-top text-center"><%= skillset.Skill.name %></th>
             <% }); %>
         </tr>
         </thead>
         <tbody>
-        <% students.forEach( function(student) { %>
+        <% group.Students.forEach( function(student) { %>
             <tr>
                 <th scope="row" class="align-middle">
                     <%= student.surname %>
                     <%= student.name %>
                 </th>
-                <% skillsets.forEach( function(item) {
-                    const skills = getMarksForSkill(item.skill_id, absence_skill_id);
-                    const is_absense_skill = item.skill_id === absence_skill_id;
-                    const is_disabled = isCurrentMark(marks, lesson.id, student.id, absence_skill_id, getMarksForSkill(absence_skill_id, absence_skill_id)[1]);
+                <% skillsets.forEach( function(skillset) {
+                    const marks = lesson.skill_marks[skillset.skill_id] || [];
+                    const is_absense_skill = skillset.skill_id === absence_skill_id;
+                    const is_disabled = lesson.hasMark(lesson.id, student.id, absence_skill_id, getMarksForSkill(absence_skill_id, absence_skill_id)[1]);
                 %>
                 <td class="align-middle <%=is_absense_skill ? 'text-left' : 'text-center'%>"
-                    id="<%= lesson.id %>_<%=student.id%>_<%=item.skill_id %>">
+                    id="<%= lesson.id %>_<%=student.id%>_<%=skillset.skill_id %>">
                     <% if(is_absense_skill) {
-                        const hasMark = skills.map(mark => isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark)).filter(Boolean).length > 0
+                        const hasMark = marks.map(mark => lesson.hasMark(lesson.id, student.id, skillset.skill_id, mark)).filter(Boolean).length > 0
                     %>
                         <div class="my-1">
-                        <% skills.forEach( function(mark) {
-                            const is_current = (!mark && !hasMark) || isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark);
+                        <% marks.forEach( function(mark) {
+                            const is_current = (!mark && !hasMark) || lesson.hasMark(lesson.id, student.id, skillset.skill_id, mark);
                         %>
                         <div class="custom-control custom-radio">
                             <input type="radio" class="mark absense-mark custom-control-input"
-                                   id="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>_<%= mark %>"
-                                   name="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>"
+                                   id="<%= lesson.id %>_<%= student.id %>_<%= skillset.skill_id %>_<%= mark %>"
+                                   name="<%= lesson.id %>_<%= student.id %>_<%= skillset.skill_id %>"
                                    value="<%= encodeURIComponent(mark) %>"
                                     <%= is_current ? 'checked="checked"' : '' %>>
-                            <label class="custom-control-label" for="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>_<%= mark %>">
+                            <label class="custom-control-label" for="<%= lesson.id %>_<%= student.id %>_<%= skillset.skill_id %>_<%= mark %>">
                                 <%=absesne_marks_labels[mark]%>
                             </label>
                         </div>
@@ -53,9 +53,9 @@
                     <% } else { %>
                         <select class="form-control form-control-sm mark value-mark"
                                 <%= is_disabled ? 'disabled="disabled"' : '' %>
-                                name="<%= lesson.id %>_<%= student.id %>_<%= item.skill_id %>">
-                            <% skills.forEach( function(mark) {
-                                const is_current = isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark);
+                                name="<%= lesson.id %>_<%= student.id %>_<%= skillset.skill_id %>">
+                            <% marks.forEach( function(mark) {
+                                const is_current = lesson.hasMark(lesson.id, student.id, skillset.skill_id, mark);
                             %>
                             <option value="<%= encodeURIComponent(mark) %>" <%= is_current ? 'selected="selected"' : '' %>>
                                 <%= mark %>

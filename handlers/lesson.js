@@ -1,8 +1,11 @@
 'use strict';
 
+const config = require('../config/config');
 const {makeUrl} = require('../utils/make-url');
 const {getTemplate} = require('../utils/get-template');
-const {SkillSets, Skills, Subjects} = require('../models');
+const {Marks, SkillSets, Skills, Students, Subjects} = require('../models');
+
+const all_marks = Marks.rawAttributes['mark'].values;
 
 module.exports = async (ctx) => {
 
@@ -12,7 +15,15 @@ module.exports = async (ctx) => {
     const groups = await ctx.state.user.getGroups({
         where: {
             'id': group_id
-        }
+        },
+        include: [{
+            model: Students,
+            as: 'Students',
+        }],
+        order: [
+            [Students, 'surname'],
+            [Students, 'name'],
+        ]
     });
 
     if (!groups.length) {
@@ -20,12 +31,13 @@ module.exports = async (ctx) => {
     }
 
     const group = groups[0]
+    ctx.state.group = group;
 
     const lessons = await group.getLessons({
         where: {
             'id': lesson_id
         },
-        include: Subjects,
+        include: [Subjects, Marks]
     });
 
     if (!lessons.length) {
@@ -33,9 +45,8 @@ module.exports = async (ctx) => {
     }
 
     const lesson = lessons[0]
-
     ctx.state.lesson = lesson
-    ctx.state.group = group;
+
     ctx.state.skillsets = await SkillSets.findAll({
         where: {
             subject_id: lesson.subject_id,
@@ -45,14 +56,7 @@ module.exports = async (ctx) => {
         order: ["skill_order", "skill_id"]
     })
 
-    ctx.state.students = await group.getStudents({
-        order: ["surname", "name"]
-    });
-
-    ctx.state.marks = await lesson.getMarks()
-
-    const used_skills = [...new Set(ctx.state.marks.map(m => m.skill_id))]
-    ctx.state.used_skills = ctx.state.skillsets.filter(s => used_skills.indexOf(s.skill_id) >= 0)
+    lesson.initLesson(ctx.state.skillsets, config.absence_skill_id, all_marks)
 
     ctx.state.title = lesson.Subject.name;
 

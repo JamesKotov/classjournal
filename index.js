@@ -23,7 +23,7 @@ const menu = require('./menu/menu.json')
 const config = require('./config/config')
 const {version} = require('./package.json')
 const {makeUrl} = require('./utils/make-url')
-const {getMarksForSkill, isCurrentMark} = require('./utils/marks')
+const {getMarksForSkill} = require('./utils/marks')
 const {formatDateShort, formatTime} = require('./utils/format-date')
 
 const errorTitles = {
@@ -139,7 +139,6 @@ app
             ctx.state.formatDateShort = formatDateShort;
             ctx.state.formatTime = formatTime;
             ctx.state.getMarksForSkill = getMarksForSkill;
-            ctx.state.isCurrentMark = isCurrentMark;
             ctx.state.makeUrl = makeUrl;
             ctx.state.encodeURIComponent = encodeURIComponent;
             ctx.state.absence_skill_id = config.absence_skill_id;

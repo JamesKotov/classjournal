@@ -4,12 +4,14 @@ const fs = require('fs');
 const path = require('path');
 
 
-const {Marks, Quarters, Skills, SkillSets, Subjects} = require('../models')
+const {Marks, Quarters, Skills, SkillSets, Students, Subjects} = require('../models')
 const {getTemplate} = require('../utils/get-template');
 const renderPdf = require('../utils/render-pdf')
 const {makeUrl} = require('../utils/make-url')
 const {getNowTime} = require('../utils/now')
 const config = require('../config/config')
+
+const all_marks = Marks.rawAttributes['mark'].values;
 
 const filepath = path.join(__dirname, '../static/bootstrap.css');
 const styles = fs.readFileSync(filepath);
@@ -43,7 +45,15 @@ module.exports = async (ctx) => {
     const groups = await ctx.state.user.getGroups({
         where: {
             'id': group_id
-        }
+        },
+        include: [{
+            model: Students,
+            as: 'Students',
+        }],
+        order: [
+            [Students, 'surname'],
+            [Students, 'name'],
+        ]
     });
     if (!groups.length) {
         return ctx.throw(404)
@@ -106,20 +116,14 @@ module.exports = async (ctx) => {
     let count = 0;
 
     lessons.forEach(l => {
-        const used_skills = [...new Set(l.Marks.map(m => m.skill_id))];
-        l.used_skills = skillsets.filter(s => used_skills.indexOf(s.skill_id) >= 0);
+        l.initLesson(skillsets, config.absence_skill_id, all_marks)
         count += (l.used_skills.length || 1);
-        const i = isPdf ?  Math.ceil(count / max_skills_per_page) - 1 : 0;
+        const i = isPdf ? Math.ceil(count / max_skills_per_page) - 1 : 0;
         lessonsParts[i] = lessonsParts[i] || [];
         lessonsParts[i].push(l);
     })
 
     ctx.state.lessonsParts = lessonsParts;
-
-
-    ctx.state.students = await group.getStudents({
-        order: ["surname", "name"]
-    });
 
     ctx.state.title = `${group.name}&nbsp;&ndash; отчет за&nbsp;${getQuarterDeclension(quarter_id)} четверть по&nbsp;предмету &laquo;${subject.name}&raquo;`;
 

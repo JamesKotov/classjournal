@@ -9,6 +9,41 @@ module.exports = (sequelize, DataTypes) => {
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
          */
+
+        _delimeter = ':';
+
+        _marks = {};
+
+        used_skills = [];
+
+        skill_marks = {};
+
+        hasMark = function (lesson_id = 0, student_id = 0, skill_id = 0, mark = '') {
+            const self = this;
+            return self._marks.hasOwnProperty(Array.from(arguments).join(self._delimeter))
+        }
+
+        initLesson = function (skillsets = [], absence_skill_id = 0, all_marks = []) {
+            const self = this;
+            self._marks = self.Marks.reduce(function (accumulator, m) {
+                accumulator[
+                    [m.lesson_id, m.student_id, m.skill_id, m.mark].join(self._delimeter)
+                    ] = true;
+                return accumulator;
+            }, {})
+
+            const used_skills = [...new Set(self.Marks.map(m => m.skill_id))];
+            self.used_skills = skillsets.filter(s => used_skills.indexOf(s.skill_id) >= 0);
+
+            self.used_skills.forEach(skill => {
+                if (skill.skill_id === absence_skill_id) {
+                    self.skill_marks[skill.skill_id] = [''].concat(all_marks.slice(0, 2));
+                } else {
+                    self.skill_marks[skill.skill_id] = [''].concat(all_marks.slice(2))
+                }
+            })
+        }
+
         static associate(models) {
             // define association here
             models.Lessons.belongsTo(models.Groups, {foreignKey: "group_id"});

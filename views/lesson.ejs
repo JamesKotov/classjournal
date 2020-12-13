@@ -60,7 +60,7 @@
                 <thead>
                 <tr>
                     <th scope="col" class="align-middle">Ученики</th>
-                    <% used_skills.forEach( function(item) { %>
+                    <% lesson.used_skills.forEach( function(item) { %>
                     <th scope="col" class="text-center skill-title">
                         <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id])%>">
                             <%= item.Skill.name %>
@@ -70,27 +70,25 @@
                 </tr>
                 </thead>
                 <tbody>
-                <% students.forEach( function(student) { %>
+                <% group.Students.forEach( function(student) { %>
                     <tr>
                         <th scope="row" class="align-middle">
                             <%= student.surname %>
                             <%= student.name %>
                         </th>
-                        <% used_skills.forEach( function(item) {
-                            const skills = getMarksForSkill(item.skill_id, absence_skill_id);
-                        %>
-                        <td class="align-middle text-center">
-                            <% skills.forEach( function(mark) { %>
-                                <% if (isCurrentMark(marks, lesson.id, student.id, item.skill_id, mark)) {%>
-                                <a href="<%=makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', item.skill_id], [lesson.id, student.id, item.skill_id])%>">
-                                    <%=mark%>
-                                </a>
+                        <% lesson.used_skills.forEach( function(skill) { %>
+                        <td class="align-middle text-center <%= lesson.is_control ? 'font-weight-bold' : ''%>">
+                            <% lesson.skill_marks[skill.skill_id].forEach( function(mark) { %>
+                                <% if (lesson.hasMark(lesson.id, student.id, skill.skill_id, mark)) { %>
+                                    <a href="<%= makeUrl(['groups', group.id, 'lessons', lesson.id, 'skill', skill.skill_id], [lesson.id, student.id, skill.skill_id]) %>">
+                                        <%= mark %>
+                                    </a>
                                 <% } %>
                             <% }) %>
                         </td>
-                        <% }); %>
+                        <% }) %>
                     </tr>
-                <% }); %>
+                <% }) %>
                 </tbody>
             </table>
         </div>

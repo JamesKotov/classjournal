@@ -1,6 +1,6 @@
 {
   "name": "classjournal",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "description": "Class journal app",
   "main": "index.js",
   "scripts": {
