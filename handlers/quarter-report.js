@@ -9,17 +9,6 @@ const config = require('../config/config')
 
 const all_marks = Marks.rawAttributes['mark'].values;
 
-const quarterDeclension = {
-    1: 'первую',
-    2: 'вторую',
-    3: 'третью',
-    4: 'четвертую',
-}
-
-function getQuarterDeclension(quarter_num) {
-    return quarterDeclension[quarter_num] || (quarter_num + '')
-}
-
 module.exports = async (ctx) => {
 
     const group_id = ctx.params.group_id;
@@ -120,7 +109,7 @@ module.exports = async (ctx) => {
 
     ctx.state.lessonsParts = lessonsParts;
 
-    ctx.state.title = `${group.name}&nbsp;&ndash; журнал за&nbsp;${getQuarterDeclension(quarter_id)} четверть по&nbsp;предмету &laquo;${subject.name}&raquo;`;
+    ctx.state.title = `${group.name}&nbsp;&ndash; журнал за&nbsp;${quarter_id} четверть по&nbsp;предмету &laquo;${subject.name}&raquo;`;
 
     ctx.state.breadcrumbs = [
         {name: "Группы", path: makeUrl(['groups'])},
