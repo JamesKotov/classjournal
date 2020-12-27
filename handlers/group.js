@@ -58,6 +58,8 @@ module.exports = async (ctx) => {
 
     ctx.state.current_quarter_id = current_quarter ? current_quarter.id : 0;
 
+    ctx.state.active_quarters = ctx.state.quarters.filter(q => q.begin.getTime() <= nowTs).map(q => q.id);
+
     ctx.state.title = group.name;
 
     ctx.state.breadcrumbs = [

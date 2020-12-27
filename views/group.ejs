@@ -76,7 +76,8 @@
         <div class="my-4 mx-3">
             <ul>
                 <% quarters.forEach( function(quarter) {
-                    let is_current_quarter = current_quarter_id && quarter.id === current_quarter_id
+                    let is_current_quarter = current_quarter_id && quarter.id === current_quarter_id;
+                    let quarters_has_link = active_quarters.indexOf(quarter.id) >= 0;
                 %>
                 <li>
                     <p class="<%= is_current_quarter ? 'font-weight-bold' : '' %>">
@@ -86,7 +87,7 @@
                         <% subjects.forEach( function(subject) { %>
                         <li>
                             <p class="<%= is_current_quarter ? 'font-weight-bold' : '' %>">
-                                <% if(current_quarter_id && quarter.id <= current_quarter_id) { %>
+                                <% if(quarters_has_link) { %>
                                     <a href="<%= makeUrl(['groups', group.id, 'reports', 'quarter', quarter.id, 'subject', subject.id]) %>">
                                         <%= subject.name %>
                                     </a>
