@@ -91,6 +91,7 @@
                                     <a href="<%= makeUrl(['groups', group.id, 'reports', 'quarter', quarter.id, 'subject', subject.id]) %>">
                                         <%= subject.name %>
                                     </a>
+                                    (<a href="<%= makeUrl(['groups', group.id, 'reports', 'quarter', quarter.id, 'subject', subject.id, 'download', 'pdf']) %>">pdf</a>)
                                 <% } else { %>
                                     <%= subject.name %>
                                 <% } %>
