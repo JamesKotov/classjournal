@@ -4,8 +4,8 @@ const envUtils = require('../utils/env');
 const getEnvVariable = envUtils.getEnvVariable;
 
 const ABSENCE_SKILL_ID = 1;
-const PDF_ORIENTATION = 'landscape'
-// const PDF_ORIENTATION = 'portrait'
+// const PDF_ORIENTATION = 'landscape'
+const PDF_ORIENTATION = 'portrait'
 const PDF_MARGINS = 10;
 const PDF_CELL_WIDTH = 18;
 
